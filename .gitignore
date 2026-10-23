@@ -1,0 +1,38 @@
+# Rust
+target/
+
+# Node / pnpm
+node_modules/
+.pnpm-store/
+
+# Frontend build output
+dist/
+.vite/
+
+# Tests & coverage
+coverage/
+playwright-report/
+test-results/
+blob-report/
+*.profraw
+lcov.info
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+
+# Editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
