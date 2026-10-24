@@ -1,4 +1,3 @@
-#[must_use]
-pub fn test_string() -> &'static str {
-    "Hello from Core"
-}
+mod rounding;
+
+pub use crate::rounding::round_up;
