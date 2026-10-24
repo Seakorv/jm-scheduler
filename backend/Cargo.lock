@@ -5,6 +5,9 @@ version = 4
 [[package]]
 name = "jmetro-api"
 version = "0.1.0"
+dependencies = [
+ "jmetro-core",
+]
 
 [[package]]
 name = "jmetro-core"

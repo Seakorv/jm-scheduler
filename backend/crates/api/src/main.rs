@@ -1,3 +1,3 @@
 fn main() {
-    println!("Hello from api");
+    println!("{}", jmetro_core::test_string());
 }
