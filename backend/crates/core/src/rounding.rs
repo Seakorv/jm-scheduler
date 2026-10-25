@@ -1,6 +1,15 @@
 /// Rounds the provided number up to the next multiple of the step.
 /// When step is zero, function returns the number, so basically it just passes through the first parameter.
 ///
+/// # Examples
+///
+/// ```
+/// use jmetro_core::round_up;
+/// let minutes = 12;
+/// let rounded = round_up(minutes, 5);
+/// assert_eq!(15, rounded);
+/// ```
+///
 /// # Panics
 ///
 /// Function doesn't deal with unrealistic overflow of u16

@@ -1,6 +1,6 @@
 use crate::time::ParseTimeError::BadFormat;
 
-/// Errors for [`parse_time`].
+/// Errors returned by [`parse_time`].
 #[derive(Debug, PartialEq)]
 pub enum ParseTimeError {
     Empty,
@@ -10,6 +10,16 @@ pub enum ParseTimeError {
 }
 
 /// Formats minutes since midnight as `HH:MM`.
+///
+/// # Examples
+///
+/// ```
+/// use jmetro_core::format_time;
+/// let minutes = 123;
+/// let minutes_in_hhmm = format_time(123);
+///
+/// assert_eq!("02:03", minutes_in_hhmm);
+/// ```
 ///
 /// # Panics
 ///
@@ -23,7 +33,16 @@ pub fn format_time(minutes: u16) -> String {
     format!("{hours:02}:{remaining_minutes:02}")
 }
 
-/// Parses `HH:MM` string to that time in minutes.
+/// Parses `HH:MM` string to that time in minutes in a Result
+///
+/// # Examples
+///
+/// ```
+/// use jmetro_core::parse_time;
+/// let hhmm = "17:20";
+/// let time_as_minutes = parse_time(hhmm);
+/// assert_eq!(Ok(1040), time_as_minutes)
+/// ```
 ///
 /// # Errors
 ///
