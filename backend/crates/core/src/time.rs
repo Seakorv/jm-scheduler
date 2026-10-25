@@ -1,5 +1,7 @@
 use crate::time::ParseTimeError::BadFormat;
 
+const DAY_IN_MINUTES: u16 = 1440;
+
 /// Errors returned by [`parse_time`].
 #[derive(Debug, PartialEq)]
 pub enum ParseTimeError {
@@ -7,6 +9,12 @@ pub enum ParseTimeError {
     BadFormat,
     HoursOutOfRange,
     MinutesOutOfRange,
+}
+
+/// Errors for [`TimeOfDay`]
+#[derive(Debug, PartialEq)]
+pub enum ValidateTimeError {
+    OverWholeDay,
 }
 
 /// Formats minutes since midnight as `HH:MM`.
@@ -25,7 +33,10 @@ pub enum ParseTimeError {
 ///
 /// Panics if `minutes` is 1440 or more, so over 24 hours.
 pub fn format_time(minutes: u16) -> String {
-    assert!(minutes < 1440, "minutes out of range :-( {minutes}");
+    assert!(
+        minutes < DAY_IN_MINUTES,
+        "minutes out of range :-( {minutes}"
+    );
 
     let hours = minutes / 60;
     let remaining_minutes = minutes - hours * 60;
@@ -79,8 +90,39 @@ pub fn parse_time(s: &str) -> Result<u16, ParseTimeError> {
     Ok(time_in_minutes)
 }
 
+/// Time struct which validates that the given minutes are less than 24 hours
+///
+/// # Example
+///
+/// ```
+/// use jmetro_core::TimeOfDay;
+/// let midday = TimeOfDay::new(720).unwrap();
+/// assert_eq!(midday.minutes(), 720);
+/// ```
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub struct TimeOfDay(u16);
+
+impl TimeOfDay {
+    /// Creates the struct and checks if the given minutes are within one day
+    ///
+    /// # Errors
+    ///
+    /// - Over or equal to 24 hours returns [`ValidateTimeError::OverWholeDay`]
+    pub fn new(minutes: u16) -> Result<Self, ValidateTimeError> {
+        if minutes >= DAY_IN_MINUTES {
+            return Err(ValidateTimeError::OverWholeDay);
+        }
+        Ok(Self(minutes))
+    }
+    /// Returns the struct's time as minutes.
+    pub fn minutes(self) -> u16 {
+        self.0
+    }
+}
+
 #[cfg(test)]
 mod tests {
+
     use super::*;
     use proptest::prelude::*;
 
@@ -196,6 +238,18 @@ mod tests {
     fn minutes_single_digit() {
         let result = parse_time("7:5");
         assert_eq!(result, Err(ParseTimeError::BadFormat));
+    }
+
+    #[test]
+    fn struct_out_of_range() {
+        let result = TimeOfDay::new(1440);
+        assert_eq!(result, Err(ValidateTimeError::OverWholeDay));
+    }
+
+    #[test]
+    fn struct_minutes_boundary() {
+        let result = TimeOfDay::new(1439).unwrap();
+        assert_eq!(result.minutes(), 1439);
     }
 
     proptest! {
