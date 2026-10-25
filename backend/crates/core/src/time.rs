@@ -36,7 +36,12 @@ pub fn parse_time(s: &str) -> Result<u16, ParseTimeError> {
         return Err(ParseTimeError::Empty);
     }
 
-    let (hours, minutes) = s.split_once(':').ok_or(BadFormat)?;
+    let (hours, minutes) = s.split_once([':', '.']).ok_or(BadFormat)?;
+
+    if minutes.len() != 2 {
+        return Err(ParseTimeError::BadFormat);
+    }
+
     let hours_int_result = hours.parse::<u16>();
     let minutes_int_result = minutes.parse::<u16>();
 
@@ -58,7 +63,7 @@ pub fn parse_time(s: &str) -> Result<u16, ParseTimeError> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    //use proptest::prelude::*;
+    use proptest::prelude::*;
 
     #[test]
     fn zero_minutes() {
@@ -97,7 +102,7 @@ mod tests {
     }
 
     #[test]
-    fn parses_correclty() {
+    fn parses_correctly() {
         let result = parse_time("17:50");
         assert_eq!(result, Ok(1070));
     }
@@ -154,5 +159,30 @@ mod tests {
     fn letters_bad_format() {
         let result = parse_time("yoloswag");
         assert_eq!(result, Err(ParseTimeError::BadFormat));
+    }
+
+    #[test]
+    fn parsing_accepts_dot() {
+        let result = parse_time("16.51");
+        assert_eq!(result, Ok(1011));
+    }
+
+    #[test]
+    fn parsing_accepts_single_digit_hour() {
+        let result = parse_time("7.30");
+        assert_eq!(result, Ok(450));
+    }
+
+    #[test]
+    fn minutes_single_digit() {
+        let result = parse_time("7:5");
+        assert_eq!(result, Err(ParseTimeError::BadFormat));
+    }
+
+    proptest! {
+        #[test]
+        fn format_any_minute(minutes in 0u16..1440) {
+            prop_assert!(parse_time(&format_time(minutes)) == Ok(minutes));
+        }
     }
 }
