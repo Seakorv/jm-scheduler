@@ -1,93 +1,20 @@
-use crate::time::ParseTimeError::BadFormat;
+use chrono::{NaiveTime, Timelike, format::ParseErrorKind};
+use std::{fmt, str};
 
-const DAY_IN_MINUTES: u16 = 1440;
+const DAY_IN_MINUTES: u32 = 1440;
 
-/// Errors returned by [`parse_time`].
+/// Errors returned when parsing a [`TimeOfDay`] from a string.
 #[derive(Debug, PartialEq)]
 pub enum ParseTimeError {
     Empty,
     BadFormat,
-    HoursOutOfRange,
-    MinutesOutOfRange,
+    OutOfRange,
 }
 
 /// Errors for [`TimeOfDay`]
 #[derive(Debug, PartialEq)]
 pub enum ValidateTimeError {
     OverWholeDay,
-}
-
-/// Formats minutes since midnight as `HH:MM`.
-///
-/// # Examples
-///
-/// ```
-/// use jmetro_core::format_time;
-/// let minutes = 123;
-/// let minutes_in_hhmm = format_time(123);
-///
-/// assert_eq!("02:03", minutes_in_hhmm);
-/// ```
-///
-/// # Panics
-///
-/// Panics if `minutes` is 1440 or more, so over 24 hours.
-pub fn format_time(minutes: u16) -> String {
-    assert!(
-        minutes < DAY_IN_MINUTES,
-        "minutes out of range :-( {minutes}"
-    );
-
-    let hours = minutes / 60;
-    let remaining_minutes = minutes - hours * 60;
-
-    format!("{hours:02}:{remaining_minutes:02}")
-}
-
-/// Parses `HH:MM` string to that time in minutes in a Result
-///
-/// # Examples
-///
-/// ```
-/// use jmetro_core::parse_time;
-/// let hhmm = "17:20";
-/// let time_as_minutes = parse_time(hhmm);
-/// assert_eq!(Ok(1040), time_as_minutes)
-/// ```
-///
-/// # Errors
-///
-/// - Incorrect formatting (17:55:12 etc.) returns [`ParseTimeError::BadFormat`]
-/// - Minutes over or equal 60 return [`ParseTimeError::MinutesOutOfRange`]
-/// - Hours over or equal 24 return [`ParseTimeError::HoursOutOfRange`]
-/// - Empty string returns [`ParseTimeError::Empty`]
-pub fn parse_time(s: &str) -> Result<u16, ParseTimeError> {
-    if s.is_empty() {
-        return Err(ParseTimeError::Empty);
-    }
-
-    let (hours, minutes) = s.split_once([':', '.']).ok_or(BadFormat)?;
-
-    if minutes.len() != 2 {
-        return Err(ParseTimeError::BadFormat);
-    }
-
-    let hours_int_result = hours.parse::<u16>();
-    let minutes_int_result = minutes.parse::<u16>();
-
-    let hours_int = hours_int_result.map_err(|_| ParseTimeError::BadFormat)?;
-    let minutes_int = minutes_int_result.map_err(|_| ParseTimeError::BadFormat)?;
-
-    if hours_int >= 24 {
-        return Err(ParseTimeError::HoursOutOfRange);
-    }
-    if minutes_int >= 60 {
-        return Err(ParseTimeError::MinutesOutOfRange);
-    }
-
-    let time_in_minutes = hours_int * 60 + minutes_int;
-
-    Ok(time_in_minutes)
 }
 
 /// Time struct which validates that the given minutes are less than 24 hours
@@ -100,7 +27,7 @@ pub fn parse_time(s: &str) -> Result<u16, ParseTimeError> {
 /// assert_eq!(midday.minutes(), 720);
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub struct TimeOfDay(u16);
+pub struct TimeOfDay(u32);
 
 impl TimeOfDay {
     /// Creates the struct and checks if the given minutes are within one day
@@ -108,15 +35,72 @@ impl TimeOfDay {
     /// # Errors
     ///
     /// - Over or equal to 24 hours returns [`ValidateTimeError::OverWholeDay`]
-    pub fn new(minutes: u16) -> Result<Self, ValidateTimeError> {
+    pub fn new(minutes: u32) -> Result<Self, ValidateTimeError> {
         if minutes >= DAY_IN_MINUTES {
             return Err(ValidateTimeError::OverWholeDay);
         }
         Ok(Self(minutes))
     }
     /// Returns the struct's time as minutes.
-    pub fn minutes(self) -> u16 {
+    pub fn minutes(self) -> u32 {
         self.0
+    }
+}
+
+/// Formats minutes since midnight as `HH:MM`.
+///
+/// # Examples
+///
+/// ```
+/// use jmetro_core::TimeOfDay;
+/// let midday = TimeOfDay::new(720).unwrap();
+/// let minutes_in_hhmm = midday.to_string();
+///
+/// assert_eq!("12:00", minutes_in_hhmm);
+/// ```
+impl fmt::Display for TimeOfDay {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let minutes = self.minutes();
+        let time = NaiveTime::from_hms_opt(minutes / 60, minutes % 60, 0).ok_or(fmt::Error)?;
+
+        write!(f, "{}", time.format("%H:%M"))
+    }
+}
+
+/// Parses `HH:MM` string to that time in minutes in a Result
+/// "16:05", "7:50" and "01:5" are all valid.
+///
+/// # Examples
+///
+/// ```
+/// use jmetro_core::TimeOfDay;
+/// let hhmm = "17:20";
+/// let time: TimeOfDay = hhmm.parse().unwrap();
+/// assert_eq!(time.minutes(), 1040);
+/// ```
+///
+/// # Errors
+///
+/// - Incorrect formatting (17:55:12 etc.) returns [`ParseTimeError::BadFormat`]
+/// - Out of range ("25:67") returns [`ParseTimeError::OutOfRange`]
+/// - Empty string returns [`ParseTimeError::Empty`]
+impl str::FromStr for TimeOfDay {
+    type Err = ParseTimeError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if s.is_empty() {
+            return Err(ParseTimeError::Empty);
+        }
+        let s_norm = s.replace('.', ":");
+
+        let time = NaiveTime::parse_from_str(&s_norm, "%H:%M").map_err(|e| match e.kind() {
+            ParseErrorKind::OutOfRange => ParseTimeError::OutOfRange,
+            _ => ParseTimeError::BadFormat,
+        })?;
+
+        let time_in_minutes = time.hour() * 60 + time.minute();
+
+        TimeOfDay::new(time_in_minutes).map_err(|_| ParseTimeError::OutOfRange)
     }
 }
 
@@ -126,118 +110,110 @@ mod tests {
     use super::*;
     use proptest::prelude::*;
 
+    fn parse(s: &str) -> Result<u32, ParseTimeError> {
+        s.parse::<TimeOfDay>().map(TimeOfDay::minutes)
+    }
+
     #[test]
     fn zero_minutes() {
-        let result = format_time(0);
+        let result = TimeOfDay::new(0).unwrap().to_string();
         assert_eq!(result, "00:00");
     }
 
     #[test]
     fn one_and_half_hours() {
-        let result = format_time(90);
+        let result = TimeOfDay::new(90).unwrap().to_string();
         assert_eq!(result, "01:30");
     }
 
     #[test]
     fn second_line_departure_time() {
-        let result = format_time(970);
+        let result = TimeOfDay::new(970).unwrap().to_string();
         assert_eq!(result, "16:10");
     }
 
     #[test]
     fn almost_midnight() {
-        let result = format_time(1439);
+        let result = TimeOfDay::new(1439).unwrap().to_string();
         assert_eq!(result, "23:59");
     }
 
     #[test]
-    #[should_panic(expected = "out of range")]
-    fn panics_at_1440() {
-        format_time(1440);
-    }
-
-    #[test]
-    #[should_panic(expected = "out of range")]
-    fn panics_at_over_a_day() {
-        format_time(6767);
+    fn struct_over_a_day() {
+        let result = TimeOfDay::new(6767);
+        assert_eq!(result, Err(ValidateTimeError::OverWholeDay));
     }
 
     #[test]
     fn parses_correctly() {
-        let result = parse_time("17:50");
+        let result = parse("17:50");
         assert_eq!(result, Ok(1070));
     }
 
     #[test]
     fn midnight() {
-        let result = parse_time("00:00");
+        let result = parse("00:00");
         assert_eq!(result, Ok(0));
     }
 
     #[test]
     fn only_minutes() {
-        let result = parse_time("00:57");
+        let result = parse("00:57");
         assert_eq!(result, Ok(57));
     }
 
     #[test]
     fn only_hours() {
-        let result = parse_time("19:00");
+        let result = parse("19:00");
         assert_eq!(result, Ok(1140));
     }
 
     #[test]
     fn hours_out_of_range() {
-        let result = parse_time("25:12");
-        assert_eq!(result, Err(ParseTimeError::HoursOutOfRange));
+        let result = parse("25:12");
+        assert_eq!(result, Err(ParseTimeError::OutOfRange));
     }
 
     #[test]
     fn minutes_out_of_range() {
-        let result = parse_time("23:67");
-        assert_eq!(result, Err(ParseTimeError::MinutesOutOfRange));
+        let result = parse("23:67");
+        assert_eq!(result, Err(ParseTimeError::OutOfRange));
     }
 
     #[test]
     fn empty_string() {
-        let result = parse_time("");
+        let result = parse("");
         assert_eq!(result, Err(ParseTimeError::Empty));
     }
 
     #[test]
     fn bad_format_string() {
-        let result = parse_time("1233123");
+        let result = parse("1233123");
         assert_eq!(result, Err(ParseTimeError::BadFormat));
     }
 
     #[test]
     fn time_with_seconds() {
-        let result = parse_time("16:00:00");
+        let result = parse("16:00:00");
         assert_eq!(result, Err(ParseTimeError::BadFormat));
     }
 
     #[test]
     fn letters_bad_format() {
-        let result = parse_time("yoloswag");
+        let result = parse("yoloswag");
         assert_eq!(result, Err(ParseTimeError::BadFormat));
     }
 
     #[test]
     fn parsing_accepts_dot() {
-        let result = parse_time("16.51");
+        let result = parse("16.51");
         assert_eq!(result, Ok(1011));
     }
 
     #[test]
     fn parsing_accepts_single_digit_hour() {
-        let result = parse_time("7.30");
+        let result = parse("7.30");
         assert_eq!(result, Ok(450));
-    }
-
-    #[test]
-    fn minutes_single_digit() {
-        let result = parse_time("7:5");
-        assert_eq!(result, Err(ParseTimeError::BadFormat));
     }
 
     #[test]
@@ -254,8 +230,9 @@ mod tests {
 
     proptest! {
         #[test]
-        fn format_any_minute(minutes in 0u16..1440) {
-            prop_assert!(parse_time(&format_time(minutes)) == Ok(minutes));
+        fn format_any_minute(minutes in 0u32..1440) {
+            let formatted = TimeOfDay::new(minutes).unwrap().to_string();
+            prop_assert_eq!(parse(&formatted), Ok(minutes));
         }
     }
 }

@@ -12,9 +12,9 @@
 ///
 /// # Panics
 ///
-/// Function doesn't deal with unrealistic overflow of u16
-/// `round_up(65534, 7)` for example. Real travel times are far less than that.
-pub fn round_up(number: u16, step: u16) -> u16 {
+/// Function doesn't deal with unrealistic overflow of u32
+/// `round_up(u32::MAX - 1, 7)` for example. Real travel times are far less than that.
+pub fn round_up(number: u32, step: u32) -> u32 {
     if step == 0 {
         return number;
     }
@@ -83,22 +83,22 @@ mod tests {
     // Realistic inputs: travel time is max 24 hours, steps max 60 minutes.
     proptest! {
         #[test]
-        fn result_is_never_smaller(number in 0u16..=1440, step in 1u16..=60) {
+        fn result_is_never_smaller(number in 0u32..=1440, step in 1u32..=60) {
             prop_assert!(round_up(number, step) >= number);
         }
 
         #[test]
-        fn result_is_a_multiple_of_step(number in 0u16..=1440, step in 1u16..=60) {
+        fn result_is_a_multiple_of_step(number in 0u32..=1440, step in 1u32..=60) {
             prop_assert_eq!(round_up(number, step) % step, 0);
         }
 
         #[test]
-        fn result_is_less_than_one_step_above(number in 0u16..=1440, step in 1u16..=60) {
+        fn result_is_less_than_one_step_above(number in 0u32..=1440, step in 1u32..=60) {
             prop_assert!(round_up(number, step) - number < step);
         }
 
         #[test]
-        fn zero_step_returns_number_unchanged(number in any::<u16>()) {
+        fn zero_step_returns_number_unchanged(number in any::<u32>()) {
             prop_assert_eq!(round_up(number, 0), number);
         }
     }
