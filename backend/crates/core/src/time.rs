@@ -211,6 +211,12 @@ mod tests {
     }
 
     #[test]
+    fn parsing_accepts_single_digit_minutes() {
+        let result = parse("07.3");
+        assert_eq!(result, Ok(423));
+    }
+
+    #[test]
     fn parsing_accepts_single_digit_hour() {
         let result = parse("7.30");
         assert_eq!(result, Ok(450));
