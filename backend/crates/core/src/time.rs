@@ -17,6 +17,22 @@ pub enum ValidateTimeError {
     OverWholeDay,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub struct Minutes(u32);
+
+/// Struct for time in minutes
+impl Minutes {
+    /// Creates the struct Minutes, which holds minutes as u32
+    pub fn new(minutes: u32) -> Self {
+        Self(minutes)
+    }
+
+    /// Returns the minutes Minutes hold (lol)
+    pub fn amount(self) -> u32 {
+        self.0
+    }
+}
+
 /// Time struct which validates that the given minutes are less than 24 hours
 ///
 /// # Example
@@ -44,6 +60,24 @@ impl TimeOfDay {
     /// Returns the struct's time as minutes.
     pub fn minutes(self) -> u32 {
         self.0
+    }
+
+    /// Adds [`Minutes`] to [`TimeOfDay`]. Returns Some(TimeOfDay) if no errors, otherwise None
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use jmetro_core::{TimeOfDay, Minutes};
+    ///
+    /// let min: Minutes = Minutes::new(10);
+    /// let time: TimeOfDay = TimeOfDay::new(1200).unwrap();
+    /// let added_time = time.checked_add(min).unwrap();
+    ///
+    /// assert_eq!(added_time.minutes(), 1210);
+    /// ```
+    pub fn checked_add(self, min: Minutes) -> Option<TimeOfDay> {
+        let temp = u32::checked_add(self.minutes(), min.amount())?;
+        TimeOfDay::new(temp).ok()
     }
 }
 
@@ -240,5 +274,11 @@ mod tests {
             let formatted = TimeOfDay::new(minutes).unwrap().to_string();
             prop_assert_eq!(parse(&formatted), Ok(minutes));
         }
+    }
+
+    #[test]
+    fn over_a_day_addition() {
+        let result = TimeOfDay::new(1200).unwrap().checked_add(Minutes::new(600));
+        assert_eq!(result, None);
     }
 }
