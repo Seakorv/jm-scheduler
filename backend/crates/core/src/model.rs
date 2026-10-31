@@ -2,6 +2,43 @@ use std::num::NonZeroU32;
 
 use crate::{AreaId, LineId, LocationId, Minutes, TimeOfDay};
 
+/// Struct for coordinates
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Coordinates {
+    pub lat: f64,
+    pub lng: f64,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Location {
+    pub id: LocationId,
+    pub name: String,
+    pub kind: LocationKind,
+    pub address: String,
+    pub coords: Option<Coordinates>,
+    pub notes: Option<String>,
+}
+
+impl Location {
+    /// Creates the location with generated id
+    pub fn new(
+        name: String,
+        kind: LocationKind,
+        address: String,
+        coords: Option<Coordinates>,
+        notes: Option<String>,
+    ) -> Self {
+        Self {
+            id: LocationId::new(),
+            name,
+            kind,
+            address,
+            coords,
+            notes,
+        }
+    }
+}
+
 /// Struct of a [`Line`]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Line {
@@ -56,6 +93,15 @@ impl Area {
             name,
         }
     }
+}
+
+/// Struct containing information of distances between locations
+#[derive(Debug, Clone, PartialEq)]
+pub struct TravelTime {
+    pub from_id: LocationId,
+    pub to_id: LocationId,
+    pub minutes: Minutes,
+    pub distance_km: Option<f64>,
 }
 
 /// What kind of location is, start spot, event end spot or a bar
