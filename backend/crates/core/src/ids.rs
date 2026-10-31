@@ -1,44 +1,32 @@
 use uuid::Uuid;
 
-/// Struct for location ID:s (Bars etc.), uuid v7
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct LocationId(Uuid);
+macro_rules! id_type {
+    ($name:ident) => {
+        /// Struct for ID:s, uuid v7
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+        pub struct $name(Uuid);
 
-impl LocationId {
-    pub fn new() -> Self {
-        Self(Uuid::now_v7())
-    }
+        impl $name {
+            pub fn new() -> Self {
+                Self(Uuid::now_v7())
+            }
 
-    pub fn id(self) -> Uuid {
-        self.0
-    }
+            pub fn id(self) -> Uuid {
+                self.0
+            }
+        }
+
+        impl Default for $name {
+            fn default() -> Self {
+                Self::new()
+            }
+        }
+    };
 }
 
-impl Default for LocationId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-/// Struct for Line ID:s (bus line etc.). uuid v7
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct LineId(Uuid);
-
-impl LineId {
-    pub fn new() -> Self {
-        Self(Uuid::now_v7())
-    }
-
-    pub fn id(self) -> Uuid {
-        self.0
-    }
-}
-
-impl Default for LineId {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+id_type!(LocationId);
+id_type!(LineId);
+id_type!(AreaId);
 
 #[cfg(test)]
 mod tests {
@@ -61,6 +49,14 @@ mod tests {
     }
 
     #[test]
+    fn different_uuids_area() {
+        let result1 = AreaId::new();
+        let result2 = AreaId::new();
+
+        assert_ne!(result1, result2);
+    }
+
+    #[test]
     fn copy_still_same_location() {
         let id = LocationId::new();
         let copy = id;
@@ -71,6 +67,14 @@ mod tests {
     #[test]
     fn copy_still_same_line() {
         let id = LineId::new();
+        let copy = id;
+
+        assert_eq!(copy, id);
+    }
+
+    #[test]
+    fn copy_still_same_area() {
+        let id = AreaId::new();
         let copy = id;
 
         assert_eq!(copy, id);

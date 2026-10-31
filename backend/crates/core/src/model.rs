@@ -1,4 +1,4 @@
-use crate::{LineId, LocationId, Minutes, TimeOfDay};
+use crate::{AreaId, LineId, LocationId, Minutes, TimeOfDay};
 
 /// Struct of a [`Line`]
 #[derive(Debug, Clone, PartialEq)]
@@ -40,6 +40,22 @@ pub struct Visit {
     pub stay_time: Minutes,
 }
 
+/// Struct for Areas (Kortepohja, Keskusta, Kuokkala etc.)
+#[derive(Debug, Clone, PartialEq)]
+pub struct Area {
+    pub id: AreaId,
+    pub name: String,
+}
+
+impl Area {
+    pub fn new(name: String) -> Self {
+        Self {
+            id: AreaId::new(),
+            name,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -74,5 +90,11 @@ mod tests {
         assert_eq!(result.bus_size, Some(57));
         assert_eq!(result.visits.len(), 2);
         assert_eq!(result.visits[0].stay_time.amount(), 40);
+    }
+
+    #[test]
+    fn test_area_creation() {
+        let result = Area::new(String::from("Kortepohja"));
+        assert_eq!(result.name, String::from("Kortepohja"));
     }
 }
