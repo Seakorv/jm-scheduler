@@ -1,3 +1,5 @@
+use std::num::NonZeroU32;
+
 use crate::{AreaId, LineId, LocationId, Minutes, TimeOfDay};
 
 /// Struct of a [`Line`]
@@ -56,6 +58,27 @@ impl Area {
     }
 }
 
+/// What kind of location is, start spot, event end spot or a bar
+#[derive(Debug, Clone, PartialEq)]
+pub enum LocationKind {
+    Start,
+    End,
+    Bar {
+        capacity: NonZeroU32,
+        area_id: AreaId,
+    },
+}
+
+impl LocationKind {
+    /// Returns locations capacity if it is a bar, otherwise it returns `None`
+    pub fn capacity(&self) -> Option<NonZeroU32> {
+        match self {
+            Self::Bar { capacity, .. } => Some(*capacity),
+            _ => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -96,5 +119,29 @@ mod tests {
     fn test_area_creation() {
         let result = Area::new(String::from("Kortepohja"));
         assert_eq!(result.name, String::from("Kortepohja"));
+    }
+
+    #[test]
+    fn test_location_kind() {
+        let result = LocationKind::Bar {
+            capacity: NonZeroU32::new(3).unwrap(),
+            area_id: AreaId::new(),
+        };
+
+        assert_eq!(result.capacity(), NonZeroU32::new(3));
+    }
+
+    #[test]
+    fn test_location_kind_start() {
+        let result = LocationKind::Start;
+
+        assert_eq!(result.capacity(), None);
+    }
+
+    #[test]
+    fn test_location_kind_end() {
+        let result = LocationKind::End;
+
+        assert_eq!(result.capacity(), None);
     }
 }
