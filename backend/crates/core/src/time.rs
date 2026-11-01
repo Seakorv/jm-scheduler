@@ -1,4 +1,5 @@
 use chrono::{NaiveTime, Timelike, format::ParseErrorKind};
+use serde::{Deserialize, Serialize};
 use std::{fmt, str};
 
 const DAY_IN_MINUTES: u32 = 1440;
@@ -17,7 +18,7 @@ pub enum ValidateTimeError {
     OverWholeDay,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct Minutes(u32);
 
 /// Struct for time in minutes
@@ -42,7 +43,7 @@ impl Minutes {
 /// let midday = TimeOfDay::new(720).unwrap();
 /// assert_eq!(midday.minutes(), 720);
 /// ```
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct TimeOfDay(u32);
 
 impl TimeOfDay {

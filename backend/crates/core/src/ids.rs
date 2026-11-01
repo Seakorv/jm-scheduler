@@ -1,9 +1,12 @@
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 macro_rules! id_type {
     ($name:ident) => {
         /// Struct for ID:s, uuid v7
-        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+        #[derive(
+            Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize,
+        )]
         pub struct $name(Uuid);
 
         impl $name {

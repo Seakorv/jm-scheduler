@@ -1,13 +1,16 @@
 use crate::Minutes;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum Language {
     Fi,
     En,
     Sv,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Settings {
     pub line_duration: Minutes,
     pub stops_per_line: u32,
@@ -41,7 +44,8 @@ impl Default for Settings {
 }
 
 /// Defining when the bar warns when there is lines over the capacity. Leeway gives some leeway to simultaneous lines.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TooManyLinesThresholds {
     pub minor: u32,
     pub warning: u32,

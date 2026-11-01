@@ -1,15 +1,18 @@
+use serde::{Deserialize, Serialize};
 use std::num::NonZeroU32;
 
 use crate::{AreaId, LineId, LocationId, Minutes, Settings, TimeOfDay, TooManyLinesThresholds};
 
 /// Struct for coordinates
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Coordinates {
     pub lat: f64,
     pub lng: f64,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Location {
     pub id: LocationId,
     pub name: String,
@@ -40,7 +43,8 @@ impl Location {
 }
 
 /// Struct of a [`Line`]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Line {
     pub id: LineId,
     pub number: u32,
@@ -73,14 +77,16 @@ impl Line {
 }
 
 /// Struct for a visit in a bar
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Visit {
     pub location_id: LocationId,
     pub stay_time: Minutes,
 }
 
 /// Struct for Areas (Kortepohja, Keskusta, Kuokkala etc.)
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Area {
     pub id: AreaId,
     pub name: String,
@@ -96,7 +102,8 @@ impl Area {
 }
 
 /// Struct containing information of distances between locations
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TravelTime {
     pub from_id: LocationId,
     pub to_id: LocationId,
@@ -105,7 +112,7 @@ pub struct TravelTime {
 }
 
 /// What kind of location is, start spot, event end spot or a bar
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum LocationKind {
     Start,
     End,
