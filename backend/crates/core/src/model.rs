@@ -113,6 +113,11 @@ pub struct TravelTime {
 
 /// What kind of location is, start spot, event end spot or a bar
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "type",
+    rename_all = "camelCase",
+    rename_all_fields = "camelCase"
+)]
 pub enum LocationKind {
     Start,
     End,
@@ -248,5 +253,21 @@ mod tests {
         let settings = Settings::default();
 
         assert_eq!(result.overload_settings(&settings), None);
+    }
+
+    #[test]
+    fn test_location_kind_bar_json() {
+        let area_id = AreaId::new();
+        let bar = LocationKind::Bar {
+            capacity: NonZeroU32::new(2).unwrap(),
+            area_id,
+            overload: None,
+        };
+
+        let json = serde_json::to_value(&bar).unwrap();
+
+        assert_eq!(json["type"], "bar");
+        assert_eq!(json["capacity"], 2);
+        assert_eq!(json["areaId"], area_id.id().to_string());
     }
 }
