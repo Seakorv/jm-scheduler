@@ -1,4 +1,6 @@
 use crate::{LocationKind, Project};
+use std::collections::HashSet;
+use std::hash::Hash;
 use thiserror::Error;
 
 #[derive(Debug, PartialEq, Error)]
@@ -15,6 +17,14 @@ pub enum ValidationIssue {
     UnknownArea,
     #[error("the location is unknown")]
     UnknownLocation,
+    #[error("two locations have the same ID")]
+    DuplicateLocationId,
+    #[error("two areas have the same ID")]
+    DuplicateAreaId,
+    #[error("two lines have the same ID")]
+    DuplicateLineId,
+    #[error("two lines have the same number")]
+    DuplicateLineNumber,
 }
 
 pub fn validate_project(project: &Project) -> Vec<ValidationIssue> {
@@ -25,6 +35,7 @@ pub fn validate_project(project: &Project) -> Vec<ValidationIssue> {
     check_travel_times(project, &mut issues);
     check_text_fields(project, &mut issues);
     check_settings(project, &mut issues);
+    check_duplicates(project, &mut issues);
     issues
 }
 
@@ -110,6 +121,26 @@ fn check_settings(project: &Project, issues: &mut Vec<ValidationIssue>) {
     }
 }
 
+fn check_duplicates(project: &Project, issues: &mut Vec<ValidationIssue>) {
+    if has_duplicates(project.locations.iter().map(|location| location.id)) {
+        issues.push(ValidationIssue::DuplicateLocationId);
+    }
+    if has_duplicates(project.areas.iter().map(|area| area.id)) {
+        issues.push(ValidationIssue::DuplicateAreaId);
+    }
+    if has_duplicates(project.lines.iter().map(|line| line.id)) {
+        issues.push(ValidationIssue::DuplicateLineId);
+    }
+    if has_duplicates(project.lines.iter().map(|line| line.number)) {
+        issues.push(ValidationIssue::DuplicateLineNumber);
+    }
+}
+
+fn has_duplicates<T: Eq + Hash>(mut values: impl Iterator<Item = T>) -> bool {
+    let mut seen = HashSet::new();
+    values.any(|value| !seen.insert(value))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -191,7 +222,9 @@ mod tests {
     #[test]
     fn visit_to_a_non_bar() {
         let mut project = valid_project();
-        project.lines.push(line_visiting(project.start_location_id));
+        let mut line = line_visiting(project.start_location_id);
+        line.number = 2;
+        project.lines.push(line);
 
         assert_eq!(
             validate_project(&project),
@@ -240,5 +273,51 @@ mod tests {
         project.settings.stay_min_soft = Minutes::new(60);
 
         assert!(has_field_issue(&project));
+    }
+
+    #[test]
+    fn duplicate_location_id() {
+        let mut project = valid_project();
+        project.locations.push(project.locations[2].clone());
+
+        assert_eq!(
+            validate_project(&project),
+            vec![ValidationIssue::DuplicateLocationId]
+        );
+    }
+
+    #[test]
+    fn duplicate_area_id() {
+        let mut project = valid_project();
+        project.areas.push(project.areas[0].clone());
+
+        assert_eq!(
+            validate_project(&project),
+            vec![ValidationIssue::DuplicateAreaId]
+        );
+    }
+
+    #[test]
+    fn duplicate_line_id() {
+        let mut project = valid_project();
+        let mut line = project.lines[0].clone();
+        line.number = 2;
+        project.lines.push(line);
+
+        assert_eq!(
+            validate_project(&project),
+            vec![ValidationIssue::DuplicateLineId]
+        );
+    }
+
+    #[test]
+    fn duplicate_line_number() {
+        let mut project = valid_project();
+        project.lines.push(line_visiting(project.locations[2].id));
+
+        assert_eq!(
+            validate_project(&project),
+            vec![ValidationIssue::DuplicateLineNumber]
+        );
     }
 }
