@@ -1,20 +1,26 @@
 use chrono::{NaiveTime, Timelike, format::ParseErrorKind};
 use serde::{Deserialize, Serialize};
+use serde_with::{DeserializeFromStr, SerializeDisplay};
 use std::{fmt, str};
+use thiserror::Error;
 
 const DAY_IN_MINUTES: u32 = 1440;
 
 /// Errors returned when parsing a [`TimeOfDay`] from a string.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Error)]
 pub enum ParseTimeError {
+    #[error("time is empty")]
     Empty,
+    #[error("time is not HH:MM")]
     BadFormat,
+    #[error("time is over 24 hours")]
     OutOfRange,
 }
 
 /// Errors for [`TimeOfDay`]
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Error)]
 pub enum ValidateTimeError {
+    #[error("time is over 24 hours")]
     OverWholeDay,
 }
 
@@ -43,7 +49,9 @@ impl Minutes {
 /// let midday = TimeOfDay::new(720).unwrap();
 /// assert_eq!(midday.minutes(), 720);
 /// ```
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, SerializeDisplay, DeserializeFromStr,
+)]
 pub struct TimeOfDay(u32);
 
 impl TimeOfDay {
@@ -281,5 +289,29 @@ mod tests {
     fn over_a_day_addition() {
         let result = TimeOfDay::new(1200).unwrap().checked_add(Minutes::new(600));
         assert_eq!(result, None);
+    }
+
+    #[test]
+    fn serializes_as_string() {
+        let time = TimeOfDay::new(970).unwrap();
+        assert_eq!(serde_json::to_string(&time).unwrap(), "\"16:10\"");
+    }
+
+    #[test]
+    fn deserializes_from_string() {
+        let time: TimeOfDay = serde_json::from_str("\"16:10\"").unwrap();
+        assert_eq!(time.minutes(), 970);
+    }
+
+    #[test]
+    fn rejects_invalid_time_in_json() {
+        let result = serde_json::from_str::<TimeOfDay>("\"25:00\"");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn rejects_invalid_time_in_json_bad_format() {
+        let result = serde_json::from_str::<TimeOfDay>("\"6967\"");
+        assert!(result.is_err());
     }
 }
