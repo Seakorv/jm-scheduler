@@ -6,7 +6,6 @@ use serde::{Deserialize, Serialize};
 pub enum Language {
     Fi,
     En,
-    Sv,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
