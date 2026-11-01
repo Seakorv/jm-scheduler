@@ -44,10 +44,19 @@ pub fn load_project(json: &str) -> Result<Project, LoadError> {
 mod tests {
     use super::*;
 
+    const EXAMPLE: &str = include_str!("../../../../examples/2024.jvms.json");
+
     #[test]
     fn rejects_newer_schema_version() {
         let result = load_project(r#"{ "schemaVersion": 67 }"#);
 
         assert!(matches!(result, Err(LoadError::UnsupportedVersion(67))));
+    }
+
+    #[test]
+    fn example_file_loads() {
+        let project = load_project(EXAMPLE).unwrap();
+
+        assert_eq!(project.lines.len(), 2);
     }
 }
