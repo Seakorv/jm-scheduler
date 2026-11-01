@@ -1,8 +1,9 @@
 use serde::Deserialize;
 use thiserror::Error;
 
-use crate::Project;
 use crate::project::SCHEMA_VERSION;
+use crate::validate::ValidationIssue;
+use crate::{Project, validate_project};
 
 #[derive(Debug, Error)]
 pub enum LoadError {
@@ -10,6 +11,8 @@ pub enum LoadError {
     InvalidJson(#[from] serde_json::Error),
     #[error("unsupported file version {0}")]
     UnsupportedVersion(u32),
+    #[error("file has incorrect data")]
+    Invalid(Vec<ValidationIssue>),
 }
 
 #[derive(Deserialize)]
@@ -30,6 +33,10 @@ pub fn load_project(json: &str) -> Result<Project, LoadError> {
         return Err(LoadError::UnsupportedVersion(header.schema_version));
     }
     let project: Project = serde_json::from_str(json)?;
+    let issues = validate_project(&project);
+    if !issues.is_empty() {
+        return Err(LoadError::Invalid(issues));
+    }
     Ok(project)
 }
 
