@@ -73,7 +73,7 @@ mod tests {
 
     use std::num::NonZeroU32;
 
-    use crate::AreaId;
+    use crate::{AreaId, Minutes, TimeOfDay, TooManyLinesThresholds, Visit};
 
     use super::*;
 
@@ -112,5 +112,76 @@ mod tests {
         project.locations.push(new_bar);
 
         assert_eq!(project.bars().count(), 1);
+    }
+
+    #[test]
+    fn project_test_json() {
+        let start_date: NaiveDate = "2067-1-1".parse().unwrap();
+        let mut project = Project::new(String::from("Kissa 123"), start_date);
+
+        let new_area = Area::new(String::from("Kortepohja"));
+        let new_area2 = Area::new(String::from("Kuokkala"));
+
+        let bar1 = Location::new(
+            String::from("Kissabaari 1"),
+            LocationKind::Bar {
+                capacity: NonZeroU32::new(3).unwrap(),
+                area_id: new_area.id,
+                overload: Some(TooManyLinesThresholds {
+                    block: 67,
+                    ..TooManyLinesThresholds::default()
+                }),
+            },
+            String::from("Kissakatu 14"),
+            None,
+            None,
+        );
+
+        let bar2 = Location::new(
+            String::from("Koirabaari 2"),
+            LocationKind::Bar {
+                capacity: NonZeroU32::new(2).unwrap(),
+                area_id: new_area2.id,
+                overload: None,
+            },
+            String::from("Koirakatu 67"),
+            None,
+            None,
+        );
+
+        let travel = TravelTime {
+            from_id: bar1.id,
+            to_id: bar2.id,
+            minutes: Minutes::new(15),
+            distance_km: Some(6.7),
+        };
+        let bar1_id = bar1.id;
+        let bar2_id = bar2.id;
+
+        project.locations.extend([bar1, bar2]);
+        project.travel_times.push(travel);
+        project.areas.extend([new_area, new_area2]);
+
+        let mut line = Line::new(1, None, false, TimeOfDay::new(970).unwrap(), Some(50));
+        line.visits.push(Visit {
+            location_id: bar1_id,
+            stay_time: Minutes::new(40),
+        });
+        line.visits.push(Visit {
+            location_id: bar2_id,
+            stay_time: Minutes::new(35),
+        });
+        project.lines.push(line);
+
+        let json = serde_json::to_string_pretty(&project).unwrap();
+        let back: Project = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(back, project);
+    }
+
+    #[test]
+    fn empty_settings_json_defaults() {
+        let settings: Settings = serde_json::from_str("{}").unwrap();
+        assert_eq!(settings, Settings::default());
     }
 }
