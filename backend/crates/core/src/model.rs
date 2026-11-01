@@ -1,6 +1,6 @@
 use std::num::NonZeroU32;
 
-use crate::{AreaId, LineId, LocationId, Minutes, TimeOfDay};
+use crate::{AreaId, LineId, LocationId, Minutes, Settings, TimeOfDay, TooManyLinesThresholds};
 
 /// Struct for coordinates
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -112,6 +112,7 @@ pub enum LocationKind {
     Bar {
         capacity: NonZeroU32,
         area_id: AreaId,
+        overload: Option<TooManyLinesThresholds>,
     },
 }
 
@@ -123,10 +124,20 @@ impl LocationKind {
             _ => None,
         }
     }
+
+    /// Gets the overload settings from a location. Only Bar has them, others are None.
+    /// If Bar returns None (= it is not set yet), it returns the default values.
+    pub fn overload_settings(&self, settings: &Settings) -> Option<TooManyLinesThresholds> {
+        match self {
+            Self::Bar { overload, .. } => Some(overload.unwrap_or(settings.bar_thresholds)),
+            _ => None,
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
+
     use super::*;
 
     fn create_line() -> Line {
@@ -172,6 +183,7 @@ mod tests {
         let result = LocationKind::Bar {
             capacity: NonZeroU32::new(3).unwrap(),
             area_id: AreaId::new(),
+            overload: None,
         };
 
         assert_eq!(result.capacity(), NonZeroU32::new(3));
@@ -189,5 +201,45 @@ mod tests {
         let result = LocationKind::End;
 
         assert_eq!(result.capacity(), None);
+    }
+
+    #[test]
+    fn test_location_kind_bar_overloads() {
+        let result = LocationKind::Bar {
+            capacity: NonZeroU32::new(3).unwrap(),
+            area_id: AreaId::new(),
+            overload: None,
+        };
+        let settings = Settings::default();
+
+        assert_eq!(
+            result.overload_settings(&settings).unwrap().minor,
+            settings.bar_thresholds.minor
+        );
+    }
+
+    #[test]
+    fn test_location_kind_bar_overload_not_none() {
+        let custom_settings = TooManyLinesThresholds {
+            block: 67,
+            ..TooManyLinesThresholds::default()
+        };
+
+        let result = LocationKind::Bar {
+            capacity: NonZeroU32::new(3).unwrap(),
+            area_id: AreaId::new(),
+            overload: Some(custom_settings),
+        };
+        let settings = Settings::default();
+
+        assert_eq!(result.overload_settings(&settings).unwrap().block, 67);
+    }
+
+    #[test]
+    fn test_location_kind_start_overload() {
+        let result = LocationKind::Start;
+        let settings = Settings::default();
+
+        assert_eq!(result.overload_settings(&settings), None);
     }
 }
