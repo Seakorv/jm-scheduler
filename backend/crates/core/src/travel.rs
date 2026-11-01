@@ -22,9 +22,13 @@ impl TravelTable {
         Self { times }
     }
 
-    /// Returns the minutes between locations.
+    /// Returns the minutes between locations. If there is no travel time between A and B,
+    /// it returns B to A, if it exists.
     pub fn raw(&self, from: LocationId, to: LocationId) -> Option<Minutes> {
-        self.times.get(&(from, to)).copied()
+        self.times
+            .get(&(from, to))
+            .or_else(|| self.times.get(&(to, from)))
+            .copied()
     }
 }
 
@@ -63,5 +67,26 @@ mod tests {
         let table = TravelTable::new(&[travel_time(a, b, 10)]);
 
         assert_eq!(table.raw(a, c), None);
+    }
+
+    #[test]
+    fn raw_falls_back_to_reverse_direction() {
+        let a = LocationId::new();
+        let b = LocationId::new();
+
+        let table = TravelTable::new(&[travel_time(a, b, 10)]);
+
+        assert_eq!(table.raw(b, a), Some(Minutes::new(10)));
+    }
+
+    #[test]
+    fn raw_prefers_explicit_direction() {
+        let a = LocationId::new();
+        let b = LocationId::new();
+
+        let table = TravelTable::new(&[travel_time(a, b, 10), travel_time(b, a, 20)]);
+
+        assert_eq!(table.raw(a, b), Some(Minutes::new(10)));
+        assert_eq!(table.raw(b, a), Some(Minutes::new(20)));
     }
 }
