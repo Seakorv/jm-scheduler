@@ -52,10 +52,27 @@ impl Project {
             lines: Vec::new(),
         }
     }
+
+    /// Finds a specific location from the project matching to the location id
+    pub fn location(&self, id: LocationId) -> Option<&Location> {
+        self.locations.iter().find(|location| id == location.id)
+    }
+
+    /// Returns an iterator of locations which are bars, so ignores starts and ends.
+    pub fn bars(&self) -> impl Iterator<Item = &Location> {
+        self.locations
+            .iter()
+            .filter(|location| matches!(location.kind, LocationKind::Bar { .. }))
+    }
 }
 
 #[cfg(test)]
 mod tests {
+
+    use std::num::NonZeroU32;
+
+    use crate::AreaId;
+
     use super::*;
 
     #[test]
@@ -66,5 +83,32 @@ mod tests {
         assert_eq!(result.locations[0].id, result.start_location_id);
         assert_eq!(result.name, String::from("JM 2067"));
         assert_eq!(result.locations.len(), 2);
+    }
+
+    #[test]
+    fn test_project_query_methods() {
+        let start_date: NaiveDate = "2067-4-27".parse().unwrap();
+        let mut project = Project::new(String::from("JM 67"), start_date);
+        let start_location = project.location(project.start_location_id);
+
+        assert_eq!(start_location.unwrap().name, String::from("Agora"));
+        assert_eq!(project.bars().count(), 0);
+        assert_eq!(project.location(LocationId::new()), None);
+
+        let new_bar = Location::new(
+            String::from("Testibaari"),
+            LocationKind::Bar {
+                capacity: NonZeroU32::new(1).unwrap(),
+                area_id: AreaId::new(),
+                overload: None,
+            },
+            String::from("Kissakuja 3"),
+            None,
+            None,
+        );
+
+        project.locations.push(new_bar);
+
+        assert_eq!(project.bars().count(), 1);
     }
 }
