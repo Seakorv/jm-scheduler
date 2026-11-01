@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 1,
+  "name": "Jyväsmetro esimerkki",
+  "eventDate": "2024-11-01",
+  "settings": {
+    "lineDuration": 300,
+    "stopsPerLine": 5,
+    "defaultStay": 40,
+    "stayMinSoft": 25,
+    "stayMaxSoft": 50,
+    "roundingStep": 5,
+    "departureStep": 10,
+    "barGapTime": 10,
+    "barThresholds": {
+      "minor": 5,
+      "warning": 10,
+      "block": 50,
+      "simultaneousLeeway": 5
+    },
+    "sameAreaMinTravel": 10,
+    "language": "fi"
+  },
+  "areas": [
+    {
+      "id": "01a197cc-824b-7fcb-ad46-ee74275f1020",
+      "name": "Keskusta"
+    },
+    {
+      "id": "01a197cc-824d-7ab9-ada8-ddad5efbaf53",
+      "name": "Kuokkala"
+    },
+    {
+      "id": "01a197cc-8250-70f9-8dbc-6ec3c14d07aa",
+      "name": "Vaajakoski"
+    },
+    {
+      "id": "01a197cc-8252-7193-bcdd-120a13e79db6",
+      "name": "Laukaa"
+    },
+    {
+      "id": "01a197cc-8255-7563-bdfd-da0335b0b39a",
+      "name": "Pupuhuhta"
+    },
+    {
+      "id": "01a197cc-8257-726a-8c9a-1696120e734e",
+      "name": "Palokka"
+    },
+    {
+      "id": "01a197cc-825a-7964-a10a-1d78e584f357",
+      "name": "Vihtavuori"
+    }
+  ],
+  "locations": [
+    {
+      "id": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "name": "Agora",
+      "kind": {
+        "type": "start"
+      },
+      "address": "Mattilanniemi 2, 40100 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "name": "Keskusta",
+      "kind": {
+        "type": "end"
+      },
+      "address": "Urhonkatu 1, 40100 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "name": "Teerenpeli",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-824b-7fcb-ad46-ee74275f1020",
+        "overload": null
+      },
+      "address": "Kauppakatu 32, 40100 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "name": "Bar Tuiteri",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-824d-7ab9-ada8-ddad5efbaf53",
+        "overload": null
+      },
+      "address": "Polttolinja 19, 40520 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "name": "Urkan Baari",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-8250-70f9-8dbc-6ec3c14d07aa",
+        "overload": null
+      },
+      "address": "Savonmäentie 9, 40800 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8269-7157-b579-83bd3cc7a571",
+      "name": "Mustankorpin saluuna",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-8252-7193-bcdd-120a13e79db6",
+        "overload": null
+      },
+      "address": "Simunankoskentie 8, 41325 Laukkavirta",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "name": "Meidän Kyläbaari",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-8255-7563-bdfd-da0335b0b39a",
+        "overload": null
+      },
+      "address": "Pupuhuhdantie 4, 40340 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "name": "Cheers",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-824b-7fcb-ad46-ee74275f1020",
+        "overload": null
+      },
+      "address": "Voionmaankatu 11, 40700 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "name": "Unelma",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-824d-7ab9-ada8-ddad5efbaf53",
+        "overload": null
+      },
+      "address": "Syöttäjänkatu 2, 40520 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8273-7372-9c9f-54081234b3e6",
+      "name": "Vaaja Pub",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-8250-70f9-8dbc-6ec3c14d07aa",
+        "overload": null
+      },
+      "address": "Vaajakoskentie 123, 40800 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "name": "Pub Kaskitupa",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-8257-726a-8c9a-1696120e734e",
+        "overload": null
+      },
+      "address": "Matinmäentie 49, 40270 Palokka",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "name": "Vihtahousu",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-825a-7964-a10a-1d78e584f357",
+        "overload": null
+      },
+      "address": "Haavistontie 5, 41330 Vihtavuori",
+      "coords": null,
+      "notes": null
+    }
+  ],
+  "startLocationId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+  "endLocationId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+  "travelTimes": [
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "toId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "toId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "toId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+      "minutes": 30,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+      "toId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "minutes": 30,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "toId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "toId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+      "toId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "toId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 25,
+      "distanceKm": null
+    }
+  ],
+  "lines": [
+    {
+      "id": "01a197cc-827a-7c32-84f4-50929f6d35fc",
+      "number": 1,
+      "label": null,
+      "isVip": false,
+      "departure": "16:00",
+      "busSize": 62,
+      "visits": [
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a197cc-827c-704c-874e-c201aa1359e1",
+      "number": 2,
+      "label": null,
+      "isVip": false,
+      "departure": "16:00",
+      "busSize": 62,
+      "visits": [
+        {
+          "locationId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+          "stayTime": 40
+        }
+      ]
+    }
+  ]
+}
