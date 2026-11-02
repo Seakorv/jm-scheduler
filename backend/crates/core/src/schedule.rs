@@ -1,4 +1,4 @@
-use crate::{LineId, LocationId, Minutes, TimeOfDay};
+use crate::{Line, LineId, LocationId, Minutes, Settings, TimeOfDay, TravelTable, Visit};
 use serde::Serialize;
 
 /// The one visit event which is computed and not stored.
@@ -66,4 +66,134 @@ pub enum LineStatus {
 pub enum IncompleteReason {
     MissingTravelTime { from: LocationId, to: LocationId },
     PastMidnight,
+}
+
+/// Calculates a single computed visit
+fn compute_visit(
+    visit: &Visit,
+    index: usize,
+    line_id: LineId,
+    from: LocationId,
+    prev_departure: TimeOfDay,
+    travel: &TravelTable,
+    step: Minutes,
+) -> Result<ComputedVisit, IncompleteReason> {
+    // Calculating the travel time to the visit, rounded.
+    let travel_in = travel.rounded(from, visit.location_id, step).ok_or(
+        IncompleteReason::MissingTravelTime {
+            from,
+            to: visit.location_id,
+        },
+    )?;
+    // calculating the arrival's `TimeOfDay`
+    let arrival = prev_departure
+        .checked_add(travel_in)
+        .ok_or(IncompleteReason::PastMidnight)?;
+    // calculating departure
+    let departure = arrival
+        .checked_add(visit.stay_time)
+        .ok_or(IncompleteReason::PastMidnight)?;
+    // returning the computed visit
+    Ok(ComputedVisit {
+        line_id,
+        location_id: visit.location_id,
+        index,
+        arrival,
+        departure,
+        travel_in,
+    })
+}
+
+/// Calculates the lines visits and travel times into `ComputedLine`
+pub fn compute_line(
+    line: &Line,
+    travel_table: &TravelTable,
+    settings: &Settings,
+    start: LocationId,
+    _end: LocationId,
+) -> ComputedLine {
+    let first_visit = line.visits.first();
+    let mut visits: Vec<ComputedVisit> = Vec::new();
+
+    if let Some(visit) = first_visit {
+        let cvisit = compute_visit(
+            visit,
+            0,
+            line.id,
+            start,
+            line.departure,
+            travel_table,
+            settings.rounding_step,
+        );
+
+        match cvisit {
+            Ok(value) => visits.push(value),
+            Err(incomplete) => {
+                return ComputedLine {
+                    line_id: line.id,
+                    visits,
+                    status: LineStatus::Incomplete {
+                        from_index: 0,
+                        reason: incomplete,
+                    },
+                };
+            }
+        }
+    }
+    ComputedLine {
+        line_id: line.id,
+        visits,
+        status: LineStatus::Incomplete {
+            from_index: 1,
+            reason: IncompleteReason::PastMidnight,
+        },
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{Line, Settings, TravelTable, TravelTime, Visit};
+
+    fn time(s: &str) -> TimeOfDay {
+        s.parse().unwrap()
+    }
+
+    fn travel_time(from_id: LocationId, to_id: LocationId, minutes: u32) -> TravelTime {
+        TravelTime {
+            from_id,
+            to_id,
+            minutes: Minutes::new(minutes),
+            distance_km: None,
+        }
+    }
+
+    #[test]
+    fn first_visit_times() {
+        let start = LocationId::new();
+        let bar = LocationId::new();
+        let end = LocationId::new();
+        // 8 raw minutes rounds up to 10
+        let table = TravelTable::new(&[travel_time(start, bar, 8), travel_time(bar, end, 10)]);
+
+        let mut line = Line::new(1, None, false, time("16:00"), None);
+        line.visits.push(Visit {
+            location_id: bar,
+            stay_time: Minutes::new(40),
+        });
+
+        let computed = compute_line(&line, &table, &Settings::default(), start, end);
+
+        assert_eq!(
+            computed.visits[0],
+            ComputedVisit {
+                line_id: line.id,
+                location_id: bar,
+                index: 0,
+                arrival: time("16:10"),
+                departure: time("16:50"),
+                travel_in: Minutes::new(10),
+            }
+        );
+    }
 }
