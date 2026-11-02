@@ -112,44 +112,50 @@ pub fn compute_line(
     start: LocationId,
     _end: LocationId,
 ) -> ComputedLine {
-    let first_visit = line.visits.first();
     let mut visits: Vec<ComputedVisit> = Vec::new();
-
-    if let Some(visit) = first_visit {
+    let mut from = start;
+    let mut prev_departure = line.departure;
+    for (i, visit) in line.visits.iter().enumerate() {
         let cvisit = compute_visit(
             visit,
-            0,
+            i,
             line.id,
-            start,
-            line.departure,
+            from,
+            prev_departure,
             travel_table,
             settings.rounding_step,
         );
 
         match cvisit {
-            Ok(value) => visits.push(value),
+            Ok(value) => {
+                from = value.location_id;
+                prev_departure = value.departure;
+                visits.push(value);
+            }
             Err(incomplete) => {
                 return ComputedLine {
                     line_id: line.id,
                     visits,
                     status: LineStatus::Incomplete {
-                        from_index: 0,
+                        from_index: i,
                         reason: incomplete,
                     },
                 };
             }
         }
     }
+
     ComputedLine {
         line_id: line.id,
         visits,
         status: LineStatus::Incomplete {
-            from_index: 1,
+            from_index: 0,
             reason: IncompleteReason::PastMidnight,
         },
     }
 }
 
+// tests by Claude
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -195,5 +201,45 @@ mod tests {
                 travel_in: Minutes::new(10),
             }
         );
+    }
+
+    #[test]
+    fn all_visits_times() {
+        let start = LocationId::new();
+        let bars = [LocationId::new(), LocationId::new(), LocationId::new()];
+        let end = LocationId::new();
+        let table = TravelTable::new(&[
+            travel_time(start, bars[0], 10),
+            // 13 raw minutes rounds up to 15
+            travel_time(bars[0], bars[1], 13),
+            travel_time(bars[1], bars[2], 5),
+            travel_time(bars[2], end, 10),
+        ]);
+
+        let mut line = Line::new(1, None, false, time("16:00"), None);
+        for (bar, stay) in bars.iter().zip([40, 30, 45]) {
+            line.visits.push(Visit {
+                location_id: *bar,
+                stay_time: Minutes::new(stay),
+            });
+        }
+
+        let computed = compute_line(&line, &table, &Settings::default(), start, end);
+
+        let times: Vec<(TimeOfDay, TimeOfDay, Minutes)> = computed
+            .visits
+            .iter()
+            .map(|visit| (visit.arrival, visit.departure, visit.travel_in))
+            .collect();
+        assert_eq!(
+            times,
+            vec![
+                (time("16:10"), time("16:50"), Minutes::new(10)),
+                (time("17:05"), time("17:35"), Minutes::new(15)),
+                (time("17:40"), time("18:25"), Minutes::new(5)),
+            ]
+        );
+        assert_eq!(computed.visits[2].index, 2);
+        assert_eq!(computed.visits[2].location_id, bars[2]);
     }
 }
