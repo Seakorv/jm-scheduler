@@ -219,6 +219,7 @@ pub fn compute_line(
 mod tests {
     use super::*;
     use crate::{Line, Settings, TravelTable, TravelTime, Visit};
+    use proptest::prelude::*;
 
     fn time(s: &str) -> TimeOfDay {
         s.parse().unwrap()
@@ -422,5 +423,50 @@ mod tests {
                 reason: IncompleteReason::PastMidnight,
             }
         );
+    }
+
+    // Random lines that always come out complete: every leg has a travel time, and departures
+    // 08:00–14:00 + at most 7 × (30 min travel + 50 min stay) + 30 min to the end never pass midnight.
+    proptest! {
+        #[test]
+        fn computed_line_adds_up(
+            departure in 480u32..=840,
+            stops in prop::collection::vec((0u32..=30, 5u32..=50), 1..=7),
+            end_travel in 0u32..=30,
+        ) {
+            let start = LocationId::new();
+            let end = LocationId::new();
+            let mut line = Line::new(1, None, false, TimeOfDay::new(departure).unwrap(), None);
+            let mut travel_times = Vec::new();
+            let mut from = start;
+            for &(travel, stay) in &stops {
+                let bar = LocationId::new();
+                travel_times.push(travel_time(from, bar, travel));
+                line.visits.push(Visit {
+                    location_id: bar,
+                    stay_time: Minutes::new(stay),
+                });
+                from = bar;
+            }
+            travel_times.push(travel_time(from, end, end_travel));
+            let table = TravelTable::new(&travel_times);
+
+            let computed = compute_line(&line, &table, &Settings::default(), start, end);
+
+            let LineStatus::Complete { travel_to_end, total, .. } = computed.status else {
+                panic!("line should be complete");
+            };
+            prop_assert_eq!(computed.visits.len(), stops.len());
+
+            // arrivals strictly increase
+            for pair in computed.visits.windows(2) {
+                prop_assert!(pair[1].arrival > pair[0].arrival);
+            }
+
+            // total == all travel + all stays
+            let travel_sum: u32 = computed.visits.iter().map(|visit| visit.travel_in.amount()).sum();
+            let stay_sum: u32 = stops.iter().map(|&(_, stay)| stay).sum();
+            prop_assert_eq!(total.amount(), travel_sum + travel_to_end.amount() + stay_sum);
+        }
     }
 }
