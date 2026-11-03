@@ -4,22 +4,22 @@ use crate::{ComputedLine, ComputedVisit, LocationId};
 
 /// Goes through computed lines and adds their visits to bars to form bar schedules. The returned `BTreeMap` is sorted by arrival time.
 pub fn bar_timelines(c_lines: &[ComputedLine]) -> BTreeMap<LocationId, Vec<ComputedVisit>> {
-    let mut bar_info: BTreeMap<LocationId, Vec<ComputedVisit>> = BTreeMap::new();
+    let mut bar_table: BTreeMap<LocationId, Vec<ComputedVisit>> = BTreeMap::new();
 
     for c_line in c_lines {
         for visit in &c_line.visits {
-            bar_info
+            bar_table
                 .entry(visit.location_id)
                 .or_default()
                 .push(visit.clone());
         }
     }
 
-    for bar in bar_info.values_mut() {
+    for bar in bar_table.values_mut() {
         bar.sort_by_key(|visit| visit.arrival);
     }
 
-    bar_info
+    bar_table
 }
 
 // tests by Claude
