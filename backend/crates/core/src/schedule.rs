@@ -337,4 +337,90 @@ mod tests {
             }
         );
     }
+
+    #[test]
+    fn missing_travel_between_visits_stops_the_line() {
+        let start = LocationId::new();
+        let bars = [LocationId::new(), LocationId::new(), LocationId::new()];
+        let end = LocationId::new();
+        // bars[0] -> bars[1] is missing
+        let table = TravelTable::new(&[
+            travel_time(start, bars[0], 10),
+            travel_time(bars[1], bars[2], 10),
+            travel_time(bars[2], end, 10),
+        ]);
+
+        let mut line = Line::new(1, None, false, time("16:00"), None);
+        for bar in bars {
+            line.visits.push(Visit {
+                location_id: bar,
+                stay_time: Minutes::new(40),
+            });
+        }
+
+        let computed = compute_line(&line, &table, &Settings::default(), start, end);
+
+        assert_eq!(computed.visits.len(), 1);
+        assert_eq!(
+            computed.status,
+            LineStatus::Incomplete {
+                from_index: 1,
+                reason: IncompleteReason::MissingTravelTime {
+                    from: bars[0],
+                    to: bars[1],
+                },
+            }
+        );
+    }
+
+    #[test]
+    fn missing_travel_to_end_keeps_all_visits() {
+        let start = LocationId::new();
+        let bar = LocationId::new();
+        let end = LocationId::new();
+        let table = TravelTable::new(&[travel_time(start, bar, 10)]);
+
+        let mut line = Line::new(1, None, false, time("16:00"), None);
+        line.visits.push(Visit {
+            location_id: bar,
+            stay_time: Minutes::new(40),
+        });
+
+        let computed = compute_line(&line, &table, &Settings::default(), start, end);
+
+        assert_eq!(computed.visits.len(), 1);
+        assert_eq!(
+            computed.status,
+            LineStatus::Incomplete {
+                from_index: 1,
+                reason: IncompleteReason::MissingTravelTime { from: bar, to: end },
+            }
+        );
+    }
+
+    #[test]
+    fn visit_past_midnight_stops_the_line() {
+        let start = LocationId::new();
+        let bar = LocationId::new();
+        let end = LocationId::new();
+        let table = TravelTable::new(&[travel_time(start, bar, 10), travel_time(bar, end, 10)]);
+
+        // arrives 23:40, would leave 00:20
+        let mut line = Line::new(1, None, false, time("23:30"), None);
+        line.visits.push(Visit {
+            location_id: bar,
+            stay_time: Minutes::new(40),
+        });
+
+        let computed = compute_line(&line, &table, &Settings::default(), start, end);
+
+        assert_eq!(computed.visits, vec![]);
+        assert_eq!(
+            computed.status,
+            LineStatus::Incomplete {
+                from_index: 0,
+                reason: IncompleteReason::PastMidnight,
+            }
+        );
+    }
 }
