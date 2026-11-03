@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use crate::{Line, LineId, LocationId, Minutes, Settings, TimeOfDay, TravelTable, Visit};
 use serde::Serialize;
 
@@ -104,13 +106,47 @@ fn compute_visit(
     })
 }
 
+/// Calculating the final travel time to end and the time of arrival to end
+fn compute_end(
+    from: LocationId,
+    prev_departure: TimeOfDay,
+    end: LocationId,
+    travel_table: &TravelTable,
+    step: Minutes,
+) -> Result<(Minutes, TimeOfDay), IncompleteReason> {
+    let travel_to_end = travel_table
+        .rounded(from, end, step)
+        .ok_or(IncompleteReason::MissingTravelTime { from, to: end })?;
+
+    let end_arrival = prev_departure
+        .checked_add(travel_to_end)
+        .ok_or(IncompleteReason::PastMidnight)?;
+
+    Ok((travel_to_end, end_arrival))
+}
+
+/// Calcualtes how much time is still left to allocate to a `Line`
+fn time_left(total: Minutes, line_duration: Minutes) -> TimeLeft {
+    let time_left = Minutes::new(total.amount().abs_diff(line_duration.amount()));
+    match total.cmp(&line_duration) {
+        Ordering::Equal => TimeLeft::Zero,
+        Ordering::Less => TimeLeft::Short(time_left),
+        Ordering::Greater => TimeLeft::Over(time_left),
+    }
+}
+
+/// Calcualtes the total minutes of a `Line` from departure time to end arrival time
+fn total_time(end_arrival: TimeOfDay, line_departure: TimeOfDay) -> Minutes {
+    Minutes::new(end_arrival.minutes() - line_departure.minutes())
+}
+
 /// Calculates the lines visits and travel times into `ComputedLine`
 pub fn compute_line(
     line: &Line,
     travel_table: &TravelTable,
     settings: &Settings,
     start: LocationId,
-    _end: LocationId,
+    end: LocationId,
 ) -> ComputedLine {
     let mut visits: Vec<ComputedVisit> = Vec::new();
     let mut from = start;
@@ -145,12 +181,35 @@ pub fn compute_line(
         }
     }
 
-    ComputedLine {
-        line_id: line.id,
-        visits,
-        status: LineStatus::Incomplete {
-            from_index: 0,
-            reason: IncompleteReason::PastMidnight,
+    let visits_len = visits.len();
+
+    match compute_end(
+        from,
+        prev_departure,
+        end,
+        travel_table,
+        settings.rounding_step,
+    ) {
+        Ok((travel_to_end, end_arrival)) => {
+            let total = total_time(end_arrival, line.departure);
+            ComputedLine {
+                line_id: line.id,
+                visits,
+                status: LineStatus::Complete {
+                    end_arrival,
+                    travel_to_end,
+                    total,
+                    time_left: time_left(total, settings.line_duration),
+                },
+            }
+        }
+        Err(reason) => ComputedLine {
+            line_id: line.id,
+            visits,
+            status: LineStatus::Incomplete {
+                from_index: visits_len,
+                reason,
+            },
         },
     }
 }
@@ -241,5 +300,41 @@ mod tests {
         );
         assert_eq!(computed.visits[2].index, 2);
         assert_eq!(computed.visits[2].location_id, bars[2]);
+    }
+
+    #[test]
+    fn time_left_zero_short_and_over() {
+        let duration = Minutes::new(300);
+
+        assert_eq!(time_left(Minutes::new(300), duration), TimeLeft::Zero);
+        assert_eq!(
+            time_left(Minutes::new(290), duration),
+            TimeLeft::Short(Minutes::new(10))
+        );
+        assert_eq!(
+            time_left(Minutes::new(305), duration),
+            TimeLeft::Over(Minutes::new(5))
+        );
+    }
+
+    #[test]
+    fn line_without_visits_goes_straight_to_end() {
+        let start = LocationId::new();
+        let end = LocationId::new();
+        let table = TravelTable::new(&[travel_time(start, end, 10)]);
+        let line = Line::new(1, None, false, time("16:00"), None);
+
+        let computed = compute_line(&line, &table, &Settings::default(), start, end);
+
+        assert_eq!(computed.visits, vec![]);
+        assert_eq!(
+            computed.status,
+            LineStatus::Complete {
+                end_arrival: time("16:10"),
+                travel_to_end: Minutes::new(10),
+                total: Minutes::new(10),
+                time_left: TimeLeft::Short(Minutes::new(290)),
+            }
+        );
     }
 }
