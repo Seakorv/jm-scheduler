@@ -15,7 +15,7 @@ pub use crate::model::{Area, Coordinates, Line, Location, LocationKind, TravelTi
 pub use crate::project::Project;
 pub use crate::rounding::round_up;
 pub use crate::schedule::{
-    ComputedLine, ComputedVisit, IncompleteReason, LineStatus, TimeLeft, compute_line,
+    ComputedLine, ComputedVisit, IncompleteReason, LineStatus, TimeLeft, compute_all, compute_line,
 };
 pub use crate::settings::{Language, Settings, TooManyLinesThresholds};
 pub use crate::time::{Minutes, ParseTimeError, TimeOfDay, ValidateTimeError};

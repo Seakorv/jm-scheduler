@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-use crate::{Line, LineId, LocationId, Minutes, Settings, TimeOfDay, TravelTable, Visit};
+use crate::{Line, LineId, LocationId, Minutes, Project, Settings, TimeOfDay, TravelTable, Visit};
 use serde::Serialize;
 
 /// The one visit event which is computed and not stored.
@@ -212,6 +212,25 @@ pub fn compute_line(
             },
         },
     }
+}
+
+/// Computes all lines from project and returns them
+pub fn compute_all(project: &Project) -> Vec<ComputedLine> {
+    let travel_table: TravelTable = TravelTable::new(&project.travel_times);
+
+    project
+        .lines
+        .iter()
+        .map(|line| {
+            compute_line(
+                line,
+                &travel_table,
+                &project.settings,
+                project.start_location_id,
+                project.end_location_id,
+            )
+        })
+        .collect()
 }
 
 // tests by Claude
@@ -467,6 +486,25 @@ mod tests {
             let travel_sum: u32 = computed.visits.iter().map(|visit| visit.travel_in.amount()).sum();
             let stay_sum: u32 = stops.iter().map(|&(_, stay)| stay).sum();
             prop_assert_eq!(total.amount(), travel_sum + travel_to_end.amount() + stay_sum);
+        }
+    }
+
+    #[test]
+    fn every_example_line_is_complete() {
+        let json = include_str!("../../../../examples/2026.jvms.json");
+        let project = crate::load_project(json).unwrap();
+
+        let computed = compute_all(&project);
+
+        assert_eq!(computed.len(), project.lines.len());
+        for (line, result) in project.lines.iter().zip(&computed) {
+            assert_eq!(result.line_id, line.id);
+            assert!(
+                matches!(result.status, LineStatus::Complete { .. }),
+                "line {} is incomplete: {:?}",
+                line.number,
+                result.status
+            );
         }
     }
 }
