@@ -1,0 +1,1391 @@
+{
+  "schemaVersion": 1,
+  "name": "Jyväsmetro 2026",
+  "eventDate": "2026-05-23",
+  "settings": {
+    "lineDuration": 300,
+    "stopsPerLine": 5,
+    "defaultStay": 40,
+    "stayMinSoft": 25,
+    "stayMaxSoft": 50,
+    "roundingStep": 5,
+    "departureStep": 10,
+    "barGapTime": 10,
+    "barThresholds": {
+      "minor": 5,
+      "warning": 10,
+      "block": 50,
+      "simultaneousLeeway": 5
+    },
+    "sameAreaMinTravel": 10,
+    "language": "fi"
+  },
+  "areas": [
+    {
+      "id": "01a197cc-824b-7fcb-ad46-ee74275f1020",
+      "name": "Keskusta"
+    },
+    {
+      "id": "01a197cc-824d-7ab9-ada8-ddad5efbaf53",
+      "name": "Kuokkala"
+    },
+    {
+      "id": "01a197cc-8250-70f9-8dbc-6ec3c14d07aa",
+      "name": "Vaajakoski"
+    },
+    {
+      "id": "01a197cc-8252-7193-bcdd-120a13e79db6",
+      "name": "Laukaa"
+    },
+    {
+      "id": "01a197cc-8255-7563-bdfd-da0335b0b39a",
+      "name": "Pupuhuhta"
+    },
+    {
+      "id": "01a197cc-8257-726a-8c9a-1696120e734e",
+      "name": "Palokka"
+    },
+    {
+      "id": "01a197cc-825a-7964-a10a-1d78e584f357",
+      "name": "Vihtavuori"
+    },
+    {
+      "id": "01a1a2cf-3122-7b8b-baad-7b5354d254f9",
+      "name": "Muurame"
+    },
+    {
+      "id": "01a1a2cf-3122-71d4-bc69-f9ab4859d58d",
+      "name": "Tikkakoski"
+    },
+    {
+      "id": "01a1a2d5-51f7-7567-ae37-0e5f7684dfd4",
+      "name": "Lutakko"
+    },
+    {
+      "id": "01a1a2d5-51f7-77af-9e94-89c6f59ab177",
+      "name": "Kortepohja"
+    }
+  ],
+  "locations": [
+    {
+      "id": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "name": "Agora",
+      "kind": {
+        "type": "start"
+      },
+      "address": "Mattilanniemi 2, 40100 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "name": "Keskusta",
+      "kind": {
+        "type": "end"
+      },
+      "address": "Urhonkatu 1, 40100 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "name": "Teerenpeli",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a197cc-824b-7fcb-ad46-ee74275f1020",
+        "overload": null
+      },
+      "address": "Kauppakatu 32, 40100 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "name": "Bar Tuiteri",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a197cc-824d-7ab9-ada8-ddad5efbaf53",
+        "overload": null
+      },
+      "address": "Polttolinja 19, 40520 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "name": "Urkan Baari",
+      "kind": {
+        "type": "bar",
+        "capacity": 3,
+        "areaId": "01a197cc-8250-70f9-8dbc-6ec3c14d07aa",
+        "overload": null
+      },
+      "address": "Savonmäentie 9, 40800 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8269-7157-b579-83bd3cc7a571",
+      "name": "Mustankorpin saluuna",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-8252-7193-bcdd-120a13e79db6",
+        "overload": null
+      },
+      "address": "Simunankoskentie 8, 41325 Laukkavirta",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "name": "Meidän Kyläbaari",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a197cc-8255-7563-bdfd-da0335b0b39a",
+        "overload": null
+      },
+      "address": "Pupuhuhdantie 4, 40340 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "name": "Cheers",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a197cc-824b-7fcb-ad46-ee74275f1020",
+        "overload": null
+      },
+      "address": "Voionmaankatu 11, 40700 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "name": "Unelma",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a197cc-824d-7ab9-ada8-ddad5efbaf53",
+        "overload": null
+      },
+      "address": "Syöttäjänkatu 2, 40520 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8273-7372-9c9f-54081234b3e6",
+      "name": "Vaaja Pub",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-8250-70f9-8dbc-6ec3c14d07aa",
+        "overload": null
+      },
+      "address": "Vaajakoskentie 123, 40800 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "name": "Pub Kaskitupa",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-8257-726a-8c9a-1696120e734e",
+        "overload": null
+      },
+      "address": "Matinmäentie 49, 40270 Palokka",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "name": "Vihtahousu",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a197cc-825a-7964-a10a-1d78e584f357",
+        "overload": null
+      },
+      "address": "Haavistontie 5, 41330 Vihtavuori",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+      "name": "Hiisi",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a1a2d5-51f7-7567-ae37-0e5f7684dfd4",
+        "overload": null
+      },
+      "address": "Lutakonaukio 3, 40100 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+      "name": "DeLorean",
+      "kind": {
+        "type": "bar",
+        "capacity": 1,
+        "areaId": "01a197cc-824b-7fcb-ad46-ee74275f1020",
+        "overload": null
+      },
+      "address": "Kauppakatu 35 (Kauppalaispiha), 40100 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+      "name": "Pub-Kierre",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a1a2d5-51f7-77af-9e94-89c6f59ab177",
+        "overload": null
+      },
+      "address": "Auvilankuja 2, 40740 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+      "name": "Melbourne",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a197cc-8257-726a-8c9a-1696120e734e",
+        "overload": null
+      },
+      "address": "Kauppakuja 3, 40270 Jyväskylä",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "name": "Muurmanni",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a1a2cf-3122-7b8b-baad-7b5354d254f9",
+        "overload": null
+      },
+      "address": "Virastotie 5, 40950 Muurame",
+      "coords": null,
+      "notes": null
+    },
+    {
+      "id": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "name": "Myllykki Pub",
+      "kind": {
+        "type": "bar",
+        "capacity": 2,
+        "areaId": "01a1a2cf-3122-71d4-bc69-f9ab4859d58d",
+        "overload": null
+      },
+      "address": "Kirkkokatu 5, 41160 Tikkakoski",
+      "coords": null,
+      "notes": null
+    }
+  ],
+  "startLocationId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+  "endLocationId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+  "travelTimes": [
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+      "minutes": 35,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-825c-7bd0-8c21-824fe3bd78df",
+      "toId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "toId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "toId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "toId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "toId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "toId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+      "toId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+      "toId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+      "toId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "minutes": 25,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+      "toId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+      "toId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "toId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "toId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "toId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+      "toId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+      "toId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+      "toId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "minutes": 30,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+      "toId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "toId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "toId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "toId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "toId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "toId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 25,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "toId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "toId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "toId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "toId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+      "toId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+      "toId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "toId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "toId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "minutes": 15,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "toId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+      "minutes": 25,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "toId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "toId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "toId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "toId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+      "toId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+      "toId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+      "minutes": 30,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+      "toId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+      "minutes": 10,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "toId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+      "minutes": 20,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 25,
+      "distanceKm": null
+    },
+    {
+      "fromId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+      "toId": "01a197cc-825f-720c-9fcf-2d302ea983e0",
+      "minutes": 0,
+      "distanceKm": null
+    }
+  ],
+  "lines": [
+    {
+      "id": "01a1a2cf-3122-725c-a7e3-6c561b264236",
+      "number": 1,
+      "label": null,
+      "isVip": false,
+      "departure": "16:00",
+      "busSize": 62,
+      "visits": [
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7248-848f-ebfba73c7282",
+      "number": 2,
+      "label": null,
+      "isVip": false,
+      "departure": "16:00",
+      "busSize": 62,
+      "visits": [
+        {
+          "locationId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-71e3-b236-cdaee00d6e69",
+      "number": 3,
+      "label": null,
+      "isVip": false,
+      "departure": "16:10",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7657-a301-97f8c02d1857",
+      "number": 4,
+      "label": null,
+      "isVip": false,
+      "departure": "16:10",
+      "busSize": 57,
+      "visits": [
+        {
+          "locationId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 45
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 50
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-70b1-83b9-b3112c2b7255",
+      "number": 5,
+      "label": null,
+      "isVip": false,
+      "departure": "16:20",
+      "busSize": 57,
+      "visits": [
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+          "stayTime": 50
+        },
+        {
+          "locationId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+          "stayTime": 50
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-730f-92ad-702d8d00085d",
+      "number": 6,
+      "label": null,
+      "isVip": false,
+      "departure": "16:20",
+      "busSize": 57,
+      "visits": [
+        {
+          "locationId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-71bc-8d39-407f2dad03ab",
+      "number": 7,
+      "label": null,
+      "isVip": false,
+      "departure": "16:30",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+          "stayTime": 45
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 35
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7e52-83f8-1cfa98b620b0",
+      "number": 8,
+      "label": null,
+      "isVip": false,
+      "departure": "16:30",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-76fd-906a-c65ee2e9e3ff",
+      "number": 9,
+      "label": null,
+      "isVip": false,
+      "departure": "16:40",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7e1c-91d4-4fbb53878717",
+      "number": 10,
+      "label": null,
+      "isVip": false,
+      "departure": "16:40",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7faa-85fa-2722f4efd48a",
+      "number": 11,
+      "label": null,
+      "isVip": false,
+      "departure": "16:50",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7cbe-9a59-44829bd4f21f",
+      "number": 12,
+      "label": null,
+      "isVip": false,
+      "departure": "16:50",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 45
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 50
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-762c-9e43-bce334fe1f29",
+      "number": 13,
+      "label": null,
+      "isVip": false,
+      "departure": "17:00",
+      "busSize": 54,
+      "visits": [
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+          "stayTime": 50
+        },
+        {
+          "locationId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7317-9f72-4020189ac7dd",
+      "number": 14,
+      "label": null,
+      "isVip": false,
+      "departure": "17:00",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-74d9-8e8d-9480a999bf18",
+      "number": 15,
+      "label": null,
+      "isVip": false,
+      "departure": "17:10",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+          "stayTime": 30
+        },
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7830-bec1-1554a95783b2",
+      "number": 16,
+      "label": null,
+      "isVip": false,
+      "departure": "17:10",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3122-7004-8ac5-12d374139aa5",
+      "number": 17,
+      "label": null,
+      "isVip": false,
+      "departure": "17:20",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3123-7103-9eab-45f8060cc128",
+      "number": 18,
+      "label": null,
+      "isVip": false,
+      "departure": "17:20",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-826e-7b23-a85a-530b7e49c68f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8273-7372-9c9f-54081234b3e6",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3123-78b2-9304-3572d7834aef",
+      "number": 19,
+      "label": null,
+      "isVip": false,
+      "departure": "17:30",
+      "busSize": 54,
+      "visits": [
+        {
+          "locationId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3123-7517-91ef-73e3883b9d8a",
+      "number": 20,
+      "label": null,
+      "isVip": false,
+      "departure": "17:30",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 45
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3123-794a-9eb4-bc2c354b4ac2",
+      "number": 21,
+      "label": null,
+      "isVip": false,
+      "departure": "17:40",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3123-76a9-a274-1e8598403361",
+      "number": 22,
+      "label": null,
+      "isVip": false,
+      "departure": "17:40",
+      "busSize": 54,
+      "visits": [
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7d56-a110-ecd12499360f",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-76fe-87e0-10df33b72aa3",
+          "stayTime": 50
+        },
+        {
+          "locationId": "01a1a2cf-3122-7a94-b295-a9af0bd79ef2",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3123-7289-8885-139e14080c91",
+      "number": 23,
+      "label": null,
+      "isVip": false,
+      "departure": "17:50",
+      "busSize": 62,
+      "visits": [
+        {
+          "locationId": "01a197cc-8264-7e50-ba68-37173ace84cd",
+          "stayTime": 45
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 35
+        },
+        {
+          "locationId": "01a1a2cf-3122-7471-9e4e-dbf2bda0cf23",
+          "stayTime": 30
+        },
+        {
+          "locationId": "01a197cc-8277-753c-a9c2-be0fabcb641c",
+          "stayTime": 35
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3123-7f07-944e-32d503598933",
+      "number": 24,
+      "label": null,
+      "isVip": false,
+      "departure": "17:50",
+      "busSize": 50,
+      "visits": [
+        {
+          "locationId": "01a197cc-8275-76cb-a2f7-1be5c0469037",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7857-b57b-01c615d794e7",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a1a2cf-3122-7caf-bcc3-b0422febbafb",
+          "stayTime": 40
+        }
+      ]
+    },
+    {
+      "id": "01a1a2cf-3123-77f0-902d-0d6153dc24ff",
+      "number": 25,
+      "label": "VIP",
+      "isVip": true,
+      "departure": "18:00",
+      "busSize": 48,
+      "visits": [
+        {
+          "locationId": "01a197cc-8261-7c20-a99a-e3fd0c947e6c",
+          "stayTime": 35
+        },
+        {
+          "locationId": "01a197cc-8270-7b00-b76f-f7833e6ea071",
+          "stayTime": 35
+        },
+        {
+          "locationId": "01a197cc-8266-737c-b8f9-a7d8647f0433",
+          "stayTime": 50
+        },
+        {
+          "locationId": "01a197cc-8269-7157-b579-83bd3cc7a571",
+          "stayTime": 40
+        },
+        {
+          "locationId": "01a197cc-826b-78d7-9700-3c8365ba78f4",
+          "stayTime": 40
+        }
+      ]
+    }
+  ]
+}
