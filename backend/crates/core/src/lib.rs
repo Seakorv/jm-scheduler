@@ -17,7 +17,7 @@ pub use crate::project::Project;
 pub use crate::rounding::round_up;
 pub use crate::rules::{
     Severity, Violation, ViolationId, ViolationKind, check_duplicate_bar, check_duration,
-    check_incomplete_line, check_stay_times, check_stop_count,
+    check_incomplete_line, check_same_area, check_stay_times, check_stop_count,
 };
 pub use crate::schedule::{
     ComputedLine, ComputedVisit, IncompleteReason, LineStatus, TimeLeft, bar_timelines,
