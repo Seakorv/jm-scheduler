@@ -143,6 +143,7 @@ pub struct ViolationId {
     visit_index: Option<usize>,
 }
 
+// Claude generated tests
 #[cfg(test)]
 mod tests {
     use super::*;

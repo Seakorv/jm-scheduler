@@ -27,6 +27,7 @@ pub fn check_duration(line: &ComputedLine) -> Option<Violation> {
     }
 }
 
+// Claude generated tests
 #[cfg(test)]
 mod tests {
     use super::*;

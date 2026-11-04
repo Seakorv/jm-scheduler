@@ -30,6 +30,7 @@ pub fn check_stay_times(line: &Line, settings: &Settings) -> Vec<Violation> {
     violations
 }
 
+// Claude generated tests
 #[cfg(test)]
 mod tests {
     use super::*;
