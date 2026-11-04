@@ -9,7 +9,7 @@ pub fn check_duration(line: &ComputedLine) -> Option<Violation> {
         } => Some(Violation {
             severity: Severity::Warning,
             kind: ViolationKind::TimeLeft {
-                line_id: line.line_id,
+                line_id: line.id,
                 minutes,
             },
         }),
@@ -19,7 +19,7 @@ pub fn check_duration(line: &ComputedLine) -> Option<Violation> {
         } => Some(Violation {
             severity: Severity::Warning,
             kind: ViolationKind::TimeOver {
-                line_id: line.line_id,
+                line_id: line.id,
                 minutes,
             },
         }),
@@ -35,7 +35,7 @@ mod tests {
 
     fn complete_line(time_left: TimeLeft) -> ComputedLine {
         ComputedLine {
-            line_id: LineId::new(),
+            id: LineId::new(),
             visits: vec![],
             status: LineStatus::Complete {
                 end_arrival: TimeOfDay::new(1260).unwrap(),
@@ -60,7 +60,7 @@ mod tests {
             Some(Violation {
                 severity: Severity::Warning,
                 kind: ViolationKind::TimeLeft {
-                    line_id: line.line_id,
+                    line_id: line.id,
                     minutes: Minutes::new(10),
                 },
             })
@@ -76,7 +76,7 @@ mod tests {
             Some(Violation {
                 severity: Severity::Warning,
                 kind: ViolationKind::TimeOver {
-                    line_id: line.line_id,
+                    line_id: line.id,
                     minutes: Minutes::new(5),
                 },
             })
@@ -86,7 +86,7 @@ mod tests {
     #[test]
     fn incomplete_line_has_no_duration_violation() {
         let line = ComputedLine {
-            line_id: LineId::new(),
+            id: LineId::new(),
             visits: vec![],
             status: LineStatus::Incomplete {
                 from_index: 0,

@@ -19,7 +19,7 @@ pub struct ComputedVisit {
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ComputedLine {
-    pub line_id: LineId,
+    pub id: LineId,
     pub visits: Vec<ComputedVisit>,
     pub status: LineStatus,
 }
@@ -170,7 +170,7 @@ pub fn compute_line(
             }
             Err(incomplete) => {
                 return ComputedLine {
-                    line_id: line.id,
+                    id: line.id,
                     visits,
                     status: LineStatus::Incomplete {
                         from_index: i,
@@ -193,7 +193,7 @@ pub fn compute_line(
         Ok((travel_to_end, end_arrival)) => {
             let total = total_time(end_arrival, line.departure);
             ComputedLine {
-                line_id: line.id,
+                id: line.id,
                 visits,
                 status: LineStatus::Complete {
                     end_arrival,
@@ -204,7 +204,7 @@ pub fn compute_line(
             }
         }
         Err(reason) => ComputedLine {
-            line_id: line.id,
+            id: line.id,
             visits,
             status: LineStatus::Incomplete {
                 from_index: visits_len,
@@ -498,7 +498,7 @@ mod tests {
 
         assert_eq!(computed.len(), project.lines.len());
         for (line, result) in project.lines.iter().zip(&computed) {
-            assert_eq!(result.line_id, line.id);
+            assert_eq!(result.id, line.id);
             assert!(
                 matches!(result.status, LineStatus::Complete { .. }),
                 "line {} is incomplete: {:?}",

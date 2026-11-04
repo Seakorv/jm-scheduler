@@ -1,6 +1,10 @@
 use std::collections::HashSet;
 
-use crate::{Line, Settings, Severity, Violation, ViolationKind};
+use crate::{
+    ComputedLine, IncompleteReason, Line, LineStatus, Settings,
+    Severity::{self, Warning},
+    Violation, ViolationKind,
+};
 
 /// Checks the stop count of a line and gives warnings if they are not correct
 pub fn check_stop_count(line: &Line, settings: &Settings) -> Option<Violation> {
@@ -40,11 +44,39 @@ pub fn check_duplicate_bar(line: &Line) -> Option<Violation> {
     None
 }
 
+/// Checks if some travel times are missing or line is past midnight
+pub fn check_incomplete_line(line: &ComputedLine) -> Option<Violation> {
+    match line.status {
+        LineStatus::Complete { .. } => None,
+        LineStatus::Incomplete {
+            reason: IncompleteReason::MissingTravelTime { from, to },
+            ..
+        } => Some(Violation {
+            severity: Severity::Warning,
+            kind: ViolationKind::MissingTravelTime {
+                line_id: line.id,
+                from,
+                to,
+            },
+        }),
+        LineStatus::Incomplete {
+            from_index,
+            reason: IncompleteReason::PastMidnight,
+        } => Some(Violation {
+            severity: Warning,
+            kind: ViolationKind::PastMidnight {
+                line_id: line.id,
+                visit_index: from_index,
+            },
+        }),
+    }
+}
+
 // Claude generated tests
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{LocationId, Minutes, TimeOfDay, Visit};
+    use crate::{LineId, LocationId, Minutes, TimeLeft, TimeOfDay, Visit};
 
     fn line_with_stops(stops: usize, is_vip: bool) -> Line {
         let mut line = Line::new(1, None, is_vip, TimeOfDay::new(960).unwrap(), None);
@@ -136,6 +168,67 @@ mod tests {
                 kind: ViolationKind::DuplicateBar {
                     line_id: line.id,
                     location_id: hiisi,
+                },
+            })
+        );
+    }
+
+    fn computed_line(status: LineStatus) -> ComputedLine {
+        ComputedLine {
+            id: LineId::new(),
+            visits: vec![],
+            status,
+        }
+    }
+
+    #[test]
+    fn complete_line_has_nothing_missing() {
+        let line = computed_line(LineStatus::Complete {
+            end_arrival: TimeOfDay::new(1260).unwrap(),
+            travel_to_end: Minutes::new(10),
+            total: Minutes::new(300),
+            time_left: TimeLeft::Zero,
+        });
+
+        assert_eq!(check_incomplete_line(&line), None);
+    }
+
+    #[test]
+    fn missing_travel_time_warns_with_both_locations() {
+        let from = LocationId::new();
+        let to = LocationId::new();
+        let line = computed_line(LineStatus::Incomplete {
+            from_index: 2,
+            reason: IncompleteReason::MissingTravelTime { from, to },
+        });
+
+        assert_eq!(
+            check_incomplete_line(&line),
+            Some(Violation {
+                severity: Severity::Warning,
+                kind: ViolationKind::MissingTravelTime {
+                    line_id: line.id,
+                    from,
+                    to,
+                },
+            })
+        );
+    }
+
+    #[test]
+    fn past_midnight_warns_with_visit_index() {
+        let line = computed_line(LineStatus::Incomplete {
+            from_index: 3,
+            reason: IncompleteReason::PastMidnight,
+        });
+
+        assert_eq!(
+            check_incomplete_line(&line),
+            Some(Violation {
+                severity: Severity::Warning,
+                kind: ViolationKind::PastMidnight {
+                    line_id: line.id,
+                    visit_index: 3,
                 },
             })
         );

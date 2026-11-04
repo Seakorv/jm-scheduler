@@ -47,7 +47,7 @@ mod tests {
     // bar_timelines only reads the visits, so the status doesn't matter
     fn computed_line(line_id: LineId, visits: Vec<ComputedVisit>) -> ComputedLine {
         ComputedLine {
-            line_id,
+            id: line_id,
             visits,
             status: LineStatus::Complete {
                 end_arrival: time("21:00"),
