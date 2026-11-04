@@ -16,8 +16,8 @@ pub use crate::model::{Area, Coordinates, Line, Location, LocationKind, TravelTi
 pub use crate::project::Project;
 pub use crate::rounding::round_up;
 pub use crate::rules::{
-    Severity, Violation, ViolationId, ViolationKind, check_duration, check_stay_times,
-    check_stop_count,
+    Severity, Violation, ViolationId, ViolationKind, check_duplicate_bar, check_duration,
+    check_stay_times, check_stop_count,
 };
 pub use crate::schedule::{
     ComputedLine, ComputedVisit, IncompleteReason, LineStatus, TimeLeft, bar_timelines,

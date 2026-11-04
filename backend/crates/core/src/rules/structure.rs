@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::{Line, Settings, Severity, Violation, ViolationKind};
 
 /// Checks the stop count of a line and gives warnings if they are not correct
@@ -19,6 +21,23 @@ pub fn check_stop_count(line: &Line, settings: &Settings) -> Option<Violation> {
         }),
         _ => None,
     }
+}
+
+/// Checks if there are duplicate bars in line visits.
+pub fn check_duplicate_bar(line: &Line) -> Option<Violation> {
+    let mut duplicate = HashSet::new();
+    for visit in &line.visits {
+        if !duplicate.insert(visit.location_id) {
+            return Some(Violation {
+                severity: Severity::Block,
+                kind: ViolationKind::DuplicateBar {
+                    line_id: line.id,
+                    location_id: visit.location_id,
+                },
+            });
+        }
+    }
+    None
 }
 
 // Claude generated tests
@@ -85,5 +104,40 @@ mod tests {
                 })
             );
         }
+    }
+
+    fn line_visiting(bars: &[LocationId]) -> Line {
+        let mut line = Line::new(1, None, false, TimeOfDay::new(960).unwrap(), None);
+        for &location_id in bars {
+            line.visits.push(Visit {
+                location_id,
+                stay_time: Minutes::new(40),
+            });
+        }
+        line
+    }
+
+    #[test]
+    fn different_bars_are_ok() {
+        let line = line_visiting(&[LocationId::new(), LocationId::new(), LocationId::new()]);
+
+        assert_eq!(check_duplicate_bar(&line), None);
+    }
+
+    #[test]
+    fn same_bar_twice_blocks() {
+        let hiisi = LocationId::new();
+        let line = line_visiting(&[hiisi, LocationId::new(), hiisi]);
+
+        assert_eq!(
+            check_duplicate_bar(&line),
+            Some(Violation {
+                severity: Severity::Block,
+                kind: ViolationKind::DuplicateBar {
+                    line_id: line.id,
+                    location_id: hiisi,
+                },
+            })
+        );
     }
 }
