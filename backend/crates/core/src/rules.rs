@@ -1,9 +1,11 @@
+mod capacity;
 mod duration;
 mod occupancy;
 mod stay;
 mod structure;
 mod violation;
 
+pub use capacity::check_capacity;
 pub use duration::check_duration;
 pub use occupancy::{Segment, bar_segments};
 pub use stay::check_stay_times;

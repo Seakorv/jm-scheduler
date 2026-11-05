@@ -20,6 +20,13 @@ pub struct Segment {
     pub count: u32,
 }
 
+/// Checks if the segment is within a visit
+impl Segment {
+    pub(crate) fn is_within(&self, visit: &ComputedVisit) -> bool {
+        self.start >= visit.arrival && self.end <= visit.departure
+    }
+}
+
 /// Makes bar visits into two events about departures and arrivals. Then puts them into a list and sorts them.
 /// Sorting by time, departures first.
 fn make_bar_events(visits: &[ComputedVisit]) -> Vec<BarEvent> {
