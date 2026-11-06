@@ -320,4 +320,45 @@ mod tests {
             vec![ValidationIssue::DuplicateLineNumber]
         );
     }
+
+    // Claude generated tests (4.22)
+    #[test]
+    fn travel_time_from_unknown_location() {
+        let mut project = valid_project();
+        project.travel_times.push(TravelTime {
+            from_id: LocationId::new(),
+            to_id: project.start_location_id,
+            minutes: Minutes::new(10),
+            distance_km: None,
+        });
+
+        assert_eq!(
+            validate_project(&project),
+            vec![ValidationIssue::UnknownLocation]
+        );
+    }
+
+    #[test]
+    fn blank_location_name() {
+        let mut project = valid_project();
+        project.locations[2].name = String::from(" ");
+
+        assert!(has_field_issue(&project));
+    }
+
+    #[test]
+    fn blank_location_address() {
+        let mut project = valid_project();
+        project.locations[2].address = String::new();
+
+        assert!(has_field_issue(&project));
+    }
+
+    #[test]
+    fn blank_area_name() {
+        let mut project = valid_project();
+        project.areas[0].name = String::new();
+
+        assert!(has_field_issue(&project));
+    }
 }

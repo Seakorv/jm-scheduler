@@ -56,39 +56,37 @@ pub fn check_capacity(
         for visit in visits {
             let overloaded = overloaded_minutes(visit, &segments, capacity.get());
             let stay_time = visit.departure.minutes() - visit.arrival.minutes();
-            if stay_time != 0 {
-                let Some(ratio_pct) = (overloaded.amount() * 100).checked_div(stay_time) else {
+            let Some(ratio_pct) = (overloaded.amount() * 100).checked_div(stay_time) else {
+                continue;
+            };
+            if capacity.get() == 1 {
+                let Some(severity) = minutes_severity(overloaded, &thresholds) else {
                     continue;
                 };
-                if capacity.get() == 1 {
-                    let Some(severity) = minutes_severity(overloaded, &thresholds) else {
-                        continue;
-                    };
-                    violations.push(Violation {
-                        severity,
-                        kind: ViolationKind::TooManyLines {
-                            line_id: visit.line_id,
-                            location_id: visit.location_id,
-                            visit_index: visit.index,
-                            overloaded,
-                            ratio_pct,
-                        },
-                    });
-                } else {
-                    let Some(severity) = ratio_severity(ratio_pct, &thresholds) else {
-                        continue;
-                    };
-                    violations.push(Violation {
-                        severity,
-                        kind: ViolationKind::TooManyLines {
-                            line_id: visit.line_id,
-                            location_id: visit.location_id,
-                            visit_index: visit.index,
-                            overloaded,
-                            ratio_pct,
-                        },
-                    });
-                }
+                violations.push(Violation {
+                    severity,
+                    kind: ViolationKind::TooManyLines {
+                        line_id: visit.line_id,
+                        location_id: visit.location_id,
+                        visit_index: visit.index,
+                        overloaded,
+                        ratio_pct,
+                    },
+                });
+            } else {
+                let Some(severity) = ratio_severity(ratio_pct, &thresholds) else {
+                    continue;
+                };
+                violations.push(Violation {
+                    severity,
+                    kind: ViolationKind::TooManyLines {
+                        line_id: visit.line_id,
+                        location_id: visit.location_id,
+                        visit_index: visit.index,
+                        overloaded,
+                        ratio_pct,
+                    },
+                });
             }
         }
     }

@@ -27,6 +27,7 @@ struct VersionHeader {
 ///
 /// - New schema version returns [`LoadError::UnsupportedVersion`]
 /// - Invalid JSON returns [`LoadError::InvalidJson`]
+/// - A project that fails validation returns [`LoadError::Invalid`]
 pub fn load_project(json: &str) -> Result<Project, LoadError> {
     let header: VersionHeader = serde_json::from_str(json)?;
     if header.schema_version > SCHEMA_VERSION {
@@ -58,5 +59,17 @@ mod tests {
         let project = load_project(EXAMPLE).unwrap();
 
         assert_eq!(project.lines.len(), 25);
+    }
+
+    // Claude generated test (4.22)
+    #[test]
+    fn rejects_project_that_fails_validation() {
+        let mut project = load_project(EXAMPLE).unwrap();
+        project.name = String::from("  ");
+        let json = serde_json::to_string(&project).unwrap();
+
+        let result = load_project(&json);
+
+        assert!(matches!(result, Err(LoadError::Invalid(_))));
     }
 }
