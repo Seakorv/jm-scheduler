@@ -12,7 +12,7 @@ mod time;
 mod travel;
 mod validate;
 
-pub use crate::evaluate::{Evaluation, evaluate};
+pub use crate::evaluate::{EditCheck, Evaluation, check_edit, evaluate};
 pub use crate::ids::{AreaId, LineId, LocationId};
 pub use crate::load::{LoadError, load_project};
 pub use crate::model::{Area, Coordinates, Line, Location, LocationKind, TravelTime, Visit};
