@@ -1,3 +1,4 @@
+mod candidates;
 mod evaluate;
 mod ids;
 mod load;
@@ -12,6 +13,7 @@ mod time;
 mod travel;
 mod validate;
 
+pub use crate::candidates::{Candidate, candidates};
 pub use crate::evaluate::{EditCheck, Evaluation, check_edit, evaluate};
 pub use crate::ids::{AreaId, LineId, LocationId};
 pub use crate::load::{LoadError, load_project};
