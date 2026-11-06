@@ -1,4 +1,6 @@
-use crate::{ComputedVisit, TimeOfDay};
+use serde::Serialize;
+
+use crate::{ComputedVisit, Minutes, TimeOfDay};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum Change {
@@ -13,7 +15,7 @@ struct BarEvent {
 }
 
 /// A stretch of time during which the number of lines at a bar stays the same.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize)]
 pub struct Segment {
     pub start: TimeOfDay,
     pub end: TimeOfDay,
@@ -24,6 +26,10 @@ pub struct Segment {
 impl Segment {
     pub(crate) fn is_within(&self, visit: &ComputedVisit) -> bool {
         self.start >= visit.arrival && self.end <= visit.departure
+    }
+
+    pub(crate) fn duration(self) -> Minutes {
+        Minutes::new(self.end.minutes() - self.start.minutes())
     }
 }
 
