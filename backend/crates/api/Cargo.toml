@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-jmetro-core = { path = "../core"}
+axum = "0.8.9"
+jmetro-core = { workspace = true }
+tokio = { version = "1.54.1", features = ["full"] }
 
 [lints]
 workspace = true
