@@ -26,12 +26,10 @@ pub struct ComputedLine {
 
 /// How much time is left to be scheduled. `Short` means there is time left, `Over` means it is over the
 /// maximum line time.
+/// Serialized with adjacent tagging (`{ "type": "short", "minutes": 10 }`), because an internal
+/// tag can't be added to a variant that only holds a number.
 #[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(
-    tag = "type",
-    rename_all = "camelCase",
-    rename_all_fields = "camelCase"
-)]
+#[serde(tag = "type", content = "minutes", rename_all = "camelCase")]
 pub enum TimeLeft {
     Short(Minutes),
     Over(Minutes),
@@ -335,6 +333,22 @@ mod tests {
             time_left(Minutes::new(305), duration),
             TimeLeft::Over(Minutes::new(5))
         );
+    }
+
+    // Claude generated test: an internal tag on `Short(Minutes)` used to fail at runtime
+    #[test]
+    fn time_left_json_shape() {
+        let json = |time_left: TimeLeft| serde_json::to_value(time_left).unwrap();
+
+        assert_eq!(
+            json(TimeLeft::Short(Minutes::new(10))),
+            serde_json::json!({ "type": "short", "minutes": 10 })
+        );
+        assert_eq!(
+            json(TimeLeft::Over(Minutes::new(5))),
+            serde_json::json!({ "type": "over", "minutes": 5 })
+        );
+        assert_eq!(json(TimeLeft::Zero), serde_json::json!({ "type": "zero" }));
     }
 
     #[test]

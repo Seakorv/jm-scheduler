@@ -1,5 +1,10 @@
 mod config;
-use axum::{Router, routing::get};
+mod error;
+mod routes;
+use axum::{
+    Router,
+    routing::{get, post},
+};
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
 
@@ -20,6 +25,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/api/health", get(health))
+        .route("/api/evaluate", post(routes::evaluate_handler))
         .layer(TraceLayer::new_for_http());
 
     let listener = tokio::net::TcpListener::bind((config.host, config.port))

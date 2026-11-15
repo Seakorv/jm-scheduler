@@ -177,4 +177,13 @@ mod tests {
                 .any(|v| matches!(v.kind, ViolationKind::DuplicateBar { .. }))
         );
     }
+
+    #[test]
+    fn candidates_serialize() {
+        let (project, _) = project();
+
+        let result = candidates(&project, project.lines[0].id, 0).unwrap();
+
+        serde_json::to_value(result).unwrap();
+    }
 }

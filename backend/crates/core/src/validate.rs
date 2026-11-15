@@ -27,6 +27,7 @@ pub enum ValidationIssue {
     DuplicateLineNumber,
 }
 
+/// Validates the project by returning list of the issues
 pub fn validate_project(project: &Project) -> Vec<ValidationIssue> {
     let mut issues = Vec::new();
     check_start_and_end(project, &mut issues);

@@ -4,10 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-axum = "0.8.9"
+axum = { version = "0.8.9", features = ["macros"] }
 figment = { version = "0.10.19", features = ["env"] }
 jmetro-core = { workspace = true }
 serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
 tokio = { version = "1.54.1", features = ["full"] }
 tower-http = { version = "0.7.1", features = ["trace"] }
 tracing = "0.1.44"

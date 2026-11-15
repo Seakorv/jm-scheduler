@@ -263,4 +263,34 @@ mod tests {
 
         assert_eq!(check.evaluation, evaluate(&after));
     }
+
+    // Every output type the API sends must serialize. Serde attribute mistakes only show up at
+    // runtime (e.g. an internal tag on a newtype variant), so cover each variant shape here.
+    #[test]
+    fn example_evaluation_serializes() {
+        let project = example();
+
+        serde_json::to_value(evaluate(&project)).unwrap();
+        serde_json::to_value(check_edit(&project, &project)).unwrap();
+    }
+
+    #[test]
+    fn incomplete_lines_serialize() {
+        let (mut missing_travel, bar) = tiny_project();
+        add_line(&mut missing_travel, 1, bar);
+        missing_travel.travel_times.pop();
+
+        let (mut past_midnight, bar) = tiny_project();
+        add_line(&mut past_midnight, 1, bar);
+        past_midnight.lines[0].departure = "23:40".parse().unwrap();
+
+        for project in [missing_travel, past_midnight] {
+            let evaluation = evaluate(&project);
+            assert!(evaluation.violations.iter().any(|v| matches!(
+                v.kind,
+                ViolationKind::MissingTravelTime { .. } | ViolationKind::PastMidnight { .. }
+            )));
+            serde_json::to_value(&evaluation).unwrap();
+        }
+    }
 }
