@@ -59,3 +59,10 @@ test-frontend:
 types:
     rm -rf ../frontend/src/model/generated
     cargo test export_bindings
+
+# Backend (bacon, auto-restart) and frontend (Vite) together, output labelled per process.
+# Ctrl+C is the normal way to stop this, so `[continue]` tells just not to treat it as a failure.
+[continue]
+[working-directory: 'frontend']
+dev:
+    pnpm exec concurrently --kill-others --names api,web --prefix-colors blue,green "cd ../backend && bacon --headless api" "pnpm dev"
