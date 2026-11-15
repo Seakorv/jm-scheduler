@@ -1,8 +1,9 @@
 use serde::Serialize;
 
 use crate::{ComputedVisit, Minutes, Segment, TimeOfDay, bar_gaps, bar_segments};
+use ts_rs::TS;
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct BarStats {
     pub lines_count: u32,

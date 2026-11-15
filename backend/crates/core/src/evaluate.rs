@@ -8,9 +8,11 @@ use crate::{
     check_duration, check_incomplete_line, check_same_area, check_stay_times, check_stop_count,
     compute_all,
 };
+use ts_rs::TS;
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export)]
 pub struct Evaluation {
     pub lines: Vec<ComputedLine>,
     pub bars: BTreeMap<LocationId, Vec<ComputedVisit>>,
@@ -19,8 +21,9 @@ pub struct Evaluation {
 }
 
 /// Result of checking an edit: blocked if `after` has blocks that `before` didn't.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export)]
 pub struct EditCheck {
     pub allowed: bool,
     pub new_blocks: Vec<Violation>,

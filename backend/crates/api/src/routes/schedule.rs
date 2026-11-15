@@ -5,16 +5,19 @@ use jmetro_core::{
 use serde::Deserialize;
 
 use crate::error::{ApiError, AppJson};
+use ts_rs::TS;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export)]
 pub struct CheckEditRequest {
     before: Project,
     after: Project,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export)]
 pub struct CandidatesRequest {
     project: Project,
     line_id: LineId,

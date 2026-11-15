@@ -5,6 +5,7 @@ use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use jmetro_core::LoadError;
 use serde::Serialize;
+use ts_rs::TS;
 
 #[derive(Debug, thiserror::Error)]
 pub enum ApiError {
@@ -18,7 +19,8 @@ pub enum ApiError {
     PayloadTooLarge,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, TS)]
+#[ts(export)]
 struct ErrorBody {
     code: &'static str,
     message: String,

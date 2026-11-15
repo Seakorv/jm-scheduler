@@ -2,13 +2,15 @@ use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 
 use crate::{Area, Line, Location, LocationId, LocationKind, Settings, TravelTime};
+use ts_rs::TS;
 
 pub const SCHEMA_VERSION: u32 = 1;
 
 /// Struct for creating project. Schema version saves the version of this struct, so
 /// updating doesn't allow old versions etc.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export)]
 pub struct Project {
     pub schema_version: u32,
     pub name: String,

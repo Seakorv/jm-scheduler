@@ -52,3 +52,10 @@ test-backend:
 [working-directory: 'frontend']
 test-frontend:
     pnpm test
+
+# Regenerate the frontend's TypeScript API types from the Rust types (ts-rs).
+# Deletes the folder first, so types removed in Rust don't leave stale files behind.
+[working-directory: 'backend']
+types:
+    rm -rf ../frontend/src/model/generated
+    cargo test export_bindings

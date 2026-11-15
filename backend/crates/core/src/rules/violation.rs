@@ -3,8 +3,9 @@ use std::mem::{Discriminant, discriminant};
 use serde::Serialize;
 
 use crate::{AreaId, LineId, LocationId, Minutes};
+use ts_rs::TS;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub enum Severity {
     Slight,
@@ -12,7 +13,7 @@ pub enum Severity {
     Block,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, TS)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -77,7 +78,7 @@ pub enum ViolationKind {
     },
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct Violation {
     pub severity: Severity,

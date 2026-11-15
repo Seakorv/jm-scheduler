@@ -6,10 +6,12 @@ use serde::Serialize;
 use crate::{
     LineId, LocationId, LocationKind, Project, Severity, Violation, ViolationId, evaluate,
 };
+use ts_rs::TS;
 
 /// What choosing one bar for a visit slot would cause.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export)]
 pub struct Candidate {
     pub location_id: LocationId,
     /// Worst new violation, `None` if the bar causes nothing new.

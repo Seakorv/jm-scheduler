@@ -2,16 +2,17 @@ use serde::{Deserialize, Serialize};
 use std::num::NonZeroU32;
 
 use crate::{AreaId, LineId, LocationId, Minutes, Settings, TimeOfDay, TooManyLinesThresholds};
+use ts_rs::TS;
 
 /// Struct for coordinates
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct Coordinates {
     pub lat: f64,
     pub lng: f64,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct Location {
     pub id: LocationId,
@@ -43,7 +44,7 @@ impl Location {
 }
 
 /// Struct of a [`Line`]
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct Line {
     pub id: LineId,
@@ -77,7 +78,7 @@ impl Line {
 }
 
 /// Struct for a visit in a bar
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct Visit {
     pub location_id: LocationId,
@@ -85,7 +86,7 @@ pub struct Visit {
 }
 
 /// Struct for Areas (Kortepohja, Keskusta, Kuokkala etc.)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct Area {
     pub id: AreaId,
@@ -102,7 +103,7 @@ impl Area {
 }
 
 /// Struct containing information of distances between locations
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct TravelTime {
     pub from_id: LocationId,
@@ -112,7 +113,7 @@ pub struct TravelTime {
 }
 
 /// What kind of location is, start spot, event end spot or a bar
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",

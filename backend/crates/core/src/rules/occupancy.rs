@@ -1,6 +1,7 @@
 use serde::Serialize;
 
 use crate::{ComputedVisit, Minutes, TimeOfDay};
+use ts_rs::TS;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum Change {
@@ -15,7 +16,7 @@ struct BarEvent {
 }
 
 /// A stretch of time during which the number of lines at a bar stays the same.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, TS)]
 pub struct Segment {
     pub start: TimeOfDay,
     pub end: TimeOfDay,

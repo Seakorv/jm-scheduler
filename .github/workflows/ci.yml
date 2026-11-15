@@ -30,6 +30,16 @@ jobs:
 
       - run: just fmt-check-backend lint-backend test-backend
 
+      - name: Generated TS types are up to date
+        run: |
+          just types
+          if [ -n "$(git status --porcelain -- frontend/src/model/generated)" ]; then
+            echo "::error::frontend/src/model/generated is out of date. Run 'just types' and commit the result."
+            git status --short -- frontend/src/model/generated
+            git diff -- frontend/src/model/generated
+            exit 1
+          fi
+
   frontend:
     runs-on: ubuntu-latest
     steps:

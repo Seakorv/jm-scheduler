@@ -2,9 +2,10 @@ use std::cmp::Ordering;
 
 use crate::{Line, LineId, LocationId, Minutes, Project, Settings, TimeOfDay, TravelTable, Visit};
 use serde::Serialize;
+use ts_rs::TS;
 
 /// The one visit event which is computed and not stored.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct ComputedVisit {
     pub line_id: LineId,
@@ -16,7 +17,7 @@ pub struct ComputedVisit {
 }
 
 /// One line's schedule computed
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct ComputedLine {
     pub id: LineId,
@@ -28,7 +29,7 @@ pub struct ComputedLine {
 /// maximum line time.
 /// Serialized with adjacent tagging (`{ "type": "short", "minutes": 10 }`), because an internal
 /// tag can't be added to a variant that only holds a number.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, TS)]
 #[serde(tag = "type", content = "minutes", rename_all = "camelCase")]
 pub enum TimeLeft {
     Short(Minutes),
@@ -37,7 +38,7 @@ pub enum TimeLeft {
 }
 
 /// Status for `Line` indicating if it is complete or not
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, TS)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",
@@ -57,7 +58,7 @@ pub enum LineStatus {
 }
 
 /// The reason why a `Line` is not complete.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, TS)]
 #[serde(
     tag = "type",
     rename_all = "camelCase",

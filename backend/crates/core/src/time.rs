@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_with::{DeserializeFromStr, SerializeDisplay};
 use std::{fmt, str};
 use thiserror::Error;
+use ts_rs::TS;
 
 const DAY_IN_MINUTES: u32 = 1440;
 
@@ -24,7 +25,7 @@ pub enum ValidateTimeError {
     OverWholeDay,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, TS)]
 pub struct Minutes(u32);
 
 /// Struct for time in minutes
@@ -50,8 +51,10 @@ impl Minutes {
 /// assert_eq!(midday.minutes(), 720);
 /// ```
 #[derive(
-    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, SerializeDisplay, DeserializeFromStr,
+    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, SerializeDisplay, DeserializeFromStr, TS,
 )]
+// Serialized as "16:10" through `Display`/`FromStr`, not as the inner number.
+#[ts(type = "string")]
 pub struct TimeOfDay(u32);
 
 impl TimeOfDay {

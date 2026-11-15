@@ -9,6 +9,7 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 serde_with = "3.24.0"
 thiserror = { workspace = true }
+ts-rs = { workspace = true }
 uuid = { workspace = true }
 
 [lints]
