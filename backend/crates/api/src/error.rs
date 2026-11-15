@@ -1,5 +1,6 @@
 use axum::Json;
-use axum::extract::{FromRequest, rejection::JsonRejection};
+use axum::extract::FromRequest;
+use axum::extract::rejection::{BytesRejection, JsonRejection};
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use jmetro_core::LoadError;
@@ -13,6 +14,8 @@ pub enum ApiError {
     UnsupportedVersion(u32),
     #[error("internal error")]
     Internal(String),
+    #[error("request body is too large")]
+    PayloadTooLarge,
 }
 
 #[derive(Serialize)]
@@ -32,6 +35,7 @@ impl IntoResponse for ApiError {
                 tracing::error!(details = %details, "internal error");
                 (StatusCode::INTERNAL_SERVER_ERROR, "internal")
             }
+            ApiError::PayloadTooLarge => (StatusCode::PAYLOAD_TOO_LARGE, "payloadTooLarge"),
         };
 
         let body = ErrorBody {
@@ -56,15 +60,11 @@ impl From<LoadError> for ApiError {
     }
 }
 
-/// JSON extractor that rejects broken JSON with an [`ApiError`] instead of axum's plain-text error.
-/// Use it in handlers in place of `axum::Json`, both for the request body and the response.
 #[derive(FromRequest)]
 #[from_request(via(axum::Json), rejection(ApiError))]
 pub struct AppJson<T>(pub T);
 
 impl<T: Serialize> IntoResponse for AppJson<T> {
-    /// Serializes the value itself, so a serialization bug is an [`ApiError::Internal`] in the
-    /// usual `{ code, message }` shape instead of axum's plain-text 500.
     fn into_response(self) -> Response {
         match serde_json::to_value(&self.0) {
             Ok(value) => Json(value).into_response(),
@@ -75,7 +75,21 @@ impl<T: Serialize> IntoResponse for AppJson<T> {
 
 impl From<JsonRejection> for ApiError {
     fn from(rejection: JsonRejection) -> Self {
-        ApiError::BadRequest(rejection.body_text())
+        check_payload_size(rejection.status(), rejection.body_text())
+    }
+}
+
+impl From<BytesRejection> for ApiError {
+    fn from(rejection: BytesRejection) -> Self {
+        check_payload_size(rejection.status(), rejection.body_text())
+    }
+}
+
+fn check_payload_size(status: StatusCode, text: String) -> ApiError {
+    if status == StatusCode::PAYLOAD_TOO_LARGE {
+        ApiError::PayloadTooLarge
+    } else {
+        ApiError::BadRequest(text)
     }
 }
 

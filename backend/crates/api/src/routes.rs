@@ -1,4 +1,4 @@
-use axum::body::Bytes;
+use axum::{body::Bytes, extract::rejection::BytesRejection};
 
 use jmetro_core::{
     Candidate, EditCheck, Evaluation, LineId, LoadError, Project, candidates, check_edit, evaluate,
@@ -57,7 +57,10 @@ pub async fn candidates_handler(
     Ok(AppJson(result))
 }
 
-pub async fn validate_handler(body: Bytes) -> Result<AppJson<Project>, ApiError> {
+pub async fn validate_handler(
+    body: Result<Bytes, BytesRejection>,
+) -> Result<AppJson<Project>, ApiError> {
+    let body = body?;
     let text =
         std::str::from_utf8(&body).map_err(|error| ApiError::BadRequest(error.to_string()))?;
 
