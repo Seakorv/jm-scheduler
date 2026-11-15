@@ -28,6 +28,7 @@ async fn main() {
         .route("/api/evaluate", post(routes::evaluate_handler))
         .route("/api/check-edit", post(routes::check_edit_handler))
         .route("/api/candidates", post(routes::candidates_handler))
+        .route("/api/project/validate", post(routes::validate_handler))
         .layer(TraceLayer::new_for_http());
 
     let listener = tokio::net::TcpListener::bind((config.host, config.port))

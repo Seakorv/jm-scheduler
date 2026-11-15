@@ -1,6 +1,8 @@
+use axum::body::Bytes;
+
 use jmetro_core::{
     Candidate, EditCheck, Evaluation, LineId, LoadError, Project, candidates, check_edit, evaluate,
-    validate_project,
+    load_project, validate_project,
 };
 use serde::Deserialize;
 
@@ -53,4 +55,13 @@ pub async fn candidates_handler(
         .ok_or_else(|| ApiError::BadRequest(String::from("unknown line or visit index")))?;
 
     Ok(AppJson(result))
+}
+
+pub async fn validate_handler(body: Bytes) -> Result<AppJson<Project>, ApiError> {
+    let text =
+        std::str::from_utf8(&body).map_err(|error| ApiError::BadRequest(error.to_string()))?;
+
+    let project = load_project(text)?;
+
+    Ok(AppJson(project))
 }
