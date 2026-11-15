@@ -1,12 +1,8 @@
+mod app;
 mod config;
 mod error;
 mod routes;
-use axum::{
-    Router,
-    extract::DefaultBodyLimit,
-    routing::{get, post},
-};
-use tower_http::{compression::CompressionLayer, trace::TraceLayer};
+
 use tracing_subscriber::EnvFilter;
 
 use crate::config::Config;
@@ -24,23 +20,9 @@ async fn main() {
     });
     tracing_subscriber::fmt().with_env_filter(filter).init();
 
-    let app = Router::new()
-        .route("/api/health", get(health))
-        .route("/api/evaluate", post(routes::evaluate_handler))
-        .route("/api/check-edit", post(routes::check_edit_handler))
-        .route("/api/candidates", post(routes::candidates_handler))
-        .route("/api/project/validate", post(routes::validate_handler))
-        .layer(DefaultBodyLimit::max(1024 * 1024))
-        .layer(CompressionLayer::new())
-        .layer(TraceLayer::new_for_http());
-
     let listener = tokio::net::TcpListener::bind((config.host, config.port))
         .await
         .unwrap();
     tracing::info!(addr = %listener.local_addr().unwrap(), "listening");
-    axum::serve(listener, app).await.unwrap();
-}
-
-async fn health() -> &'static str {
-    "ok"
+    axum::serve(listener, app::app()).await.unwrap();
 }
