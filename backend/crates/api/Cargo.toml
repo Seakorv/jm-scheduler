@@ -5,7 +5,9 @@ edition = "2024"
 
 [dependencies]
 axum = "0.8.9"
+figment = { version = "0.10.19", features = ["env"] }
 jmetro-core = { workspace = true }
+serde = { workspace = true }
 tokio = { version = "1.54.1", features = ["full"] }
 
 [lints]
