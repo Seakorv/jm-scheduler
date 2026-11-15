@@ -24,5 +24,34 @@ async fn main() {
         .await
         .unwrap();
     tracing::info!(addr = %listener.local_addr().unwrap(), "listening");
-    axum::serve(listener, app::app()).await.unwrap();
+    axum::serve(listener, app::app())
+        .with_graceful_shutdown(shutdown_signal())
+        .await
+        .unwrap();
+}
+
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        tokio::signal::ctrl_c()
+            .await
+            .expect("failed to listen for Ctrl+C");
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
+            .expect("failed to listen for SIGTERM")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        () = ctrl_c => {},
+        () = terminate => {},
+    }
+
+    tracing::info!("shutting down");
 }
