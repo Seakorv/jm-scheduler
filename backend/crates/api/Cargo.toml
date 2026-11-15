@@ -9,6 +9,9 @@ figment = { version = "0.10.19", features = ["env"] }
 jmetro-core = { workspace = true }
 serde = { workspace = true }
 tokio = { version = "1.54.1", features = ["full"] }
+tower-http = { version = "0.7.1", features = ["trace"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 
 [lints]
 workspace = true

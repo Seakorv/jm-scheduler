@@ -18,7 +18,7 @@ impl Default for Config {
         Self {
             host: IpAddr::V4(Ipv4Addr::LOCALHOST),
             port: 3000,
-            log_level: String::from("info"),
+            log_level: String::from("info,tower_http=debug"),
             allowed_origin: String::from("http://localhost:5173"),
         }
     }
