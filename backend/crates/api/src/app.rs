@@ -9,3 +9,7 @@ pub fn app() -> Router {
         .layer(CompressionLayer::new())
         .layer(TraceLayer::new_for_http())
 }
+
+// Claude generated tests
+#[cfg(test)]
+mod tests;
