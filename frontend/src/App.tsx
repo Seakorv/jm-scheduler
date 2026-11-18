@@ -8,7 +8,9 @@ function App() {
   return (
     <div>
       <h1>{t("app.title")}</h1>
-      <Button onClick={() => console.log("Böö")}>Testi</Button>
+      <Button onClick={() => console.log(t("common.asd"))}>
+        {t("common.test")}
+      </Button>
     </div>
   );
 }
