@@ -1,0 +1,10 @@
+{
+  "app": {
+    "title": "Jyväsmetro Aikatauluapp"
+  },
+  "nav": {
+    "map": "Kartta",
+    "lines": "Linjat",
+    "bars": "Baarit"
+  }
+}
